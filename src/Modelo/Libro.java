@@ -14,6 +14,7 @@ public class Libro {
 		this.editorial = editorial;
 		this.edicion = edicion;
 	}
+	
 	/**
 	 * @return the isbnLibro
 	 */
@@ -79,8 +80,8 @@ public class Libro {
 	 */
 	@Override
 	public String toString() {
-		return "Libro [isbnLibro=" + isbnLibro + ", titulo=" + titulo + ", autor=" + autor + ", editorial=" + editorial
-				+ ", edicion=" + edicion + "]";
+		return "Libro ISBN = " + isbnLibro + ", TITULO = " + titulo + ", AUTOR = " + autor + ", EDITORIAL = " + editorial
+				+ ", EDICION = " + edicion + "]\n";
 	}
 
 	

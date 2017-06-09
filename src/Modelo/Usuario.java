@@ -77,7 +77,7 @@ public class Usuario {
 	@Override
 	public String toString() {
 		return "Usuario [dniUsuario=" + dniUsuario + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
-				+ direccion + "]";
+				+ direccion + "]\n";
 	}
 
 	
