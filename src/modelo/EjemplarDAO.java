@@ -1,4 +1,4 @@
-package Modelo;
+package modelo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +18,8 @@ public class EjemplarDAO implements IEjemplarDAO {
 	Statement statement;
 	ResultSet resultSet;
 	int filas=0;	
+	
+	
 	
 	public EjemplarDAO() {
 	}
@@ -225,7 +227,8 @@ public class EjemplarDAO implements IEjemplarDAO {
 		
 		//System.out.println(ej);
 		List <Ejemplar> lista = new EjemplarDAO().obtenerListaEjemplares();
-		Object [][] data = new EjemplarDAO().listaAMatriz(lista);
+		new EjemplarDAO();
+		Object [][] data = EjemplarDAO.listaAMatriz(lista);
 		for (int i=0 ; i < lista.size() ;i++){
 			System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4] + "," + data[i][5]);
 		}

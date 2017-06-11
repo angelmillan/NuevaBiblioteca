@@ -1,4 +1,4 @@
-package Vista;
+package vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -11,20 +11,24 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
-import javax.swing.JScrollBar;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
-import java.awt.Font;
 import java.awt.Color;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+
+import controlador.Controlador;
+import controlador.ModeloTablaEjemplares;
+import modelo.EjemplarDAO;
+
 import javax.swing.border.EtchedBorder;
 import java.awt.Rectangle;
 
 
+@SuppressWarnings("serial")
 public class Vista extends JFrame {
 
 	private JPanel panelUsuarios;
@@ -58,12 +62,27 @@ public class Vista extends JFrame {
 	private JPanel panelInternoEjemplares;
 	private JScrollPane scrollPane;
 	private JTextField txtEditorial;
+	/**
+	 * @return the mntmSalir
+	 */
+	public JMenuItem getMntmSalir() {
+		return mntmSalir;
+	}
+
+	/**
+	 * @param mntmSalir the mntmSalir to set
+	 */
+	public void setMntmSalir(JMenuItem mntmSalir) {
+		this.mntmSalir = mntmSalir;
+	}
+
 	private JTextField txtEdicion;
 	private JTextField txtAutor;
 	private JTextField txtIsbnejemplar;
 	private JTextField txtTitulo;
 	private JTextField txtNumeroejemplar;
 	private JMenuBar menuBar;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -74,6 +93,7 @@ public class Vista extends JFrame {
 				try {
 					Vista frame = new Vista();
 					frame.setVisible(true);
+					new Controlador (frame, new EjemplarDAO());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -100,7 +120,7 @@ public class Vista extends JFrame {
 		panelLibros.setLayout(new BorderLayout(0, 0));
 		
 		panelEjemplares = new JPanel();
-		panelEjemplares.setVisible(false);
+		panelEjemplares.setVisible(true);
 		contentPane.add(panelEjemplares);	
 		
 		panelPrestamos = new JPanel();
@@ -220,8 +240,9 @@ public class Vista extends JFrame {
 					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		
-		JTable table = new JTable();
+		table = new JTable(new ModeloTablaEjemplares());
 		scrollPane.setViewportView(table);
+		int posicion = table.getSelectedRow();
 		
 		JLabel lblEjemplar = new JLabel("Ejemplar");
 		
@@ -316,4 +337,104 @@ public class Vista extends JFrame {
 		
 		
 	}
+
+	/**
+	 * @return the txtEditorial
+	 */
+	public JTextField getTxtEditorial() {
+		return txtEditorial;
+	}
+
+	/**
+	 * @param txtEditorial the txtEditorial to set
+	 */
+	public void setTxtEditorial(JTextField txtEditorial) {
+		this.txtEditorial = txtEditorial;
+	}
+
+	/**
+	 * @return the txtEdicion
+	 */
+	public JTextField getTxtEdicion() {
+		return txtEdicion;
+	}
+
+	/**
+	 * @param txtEdicion the txtEdicion to set
+	 */
+	public void setTxtEdicion(JTextField txtEdicion) {
+		this.txtEdicion = txtEdicion;
+	}
+
+	/**
+	 * @return the txtAutor
+	 */
+	public JTextField getTxtAutor() {
+		return txtAutor;
+	}
+
+	/**
+	 * @param txtAutor the txtAutor to set
+	 */
+	public void setTxtAutor(JTextField txtAutor) {
+		this.txtAutor = txtAutor;
+	}
+
+	/**
+	 * @return the txtIsbnejemplar
+	 */
+	public JTextField getTxtIsbnejemplar() {
+		return txtIsbnejemplar;
+	}
+
+	/**
+	 * @param txtIsbnejemplar the txtIsbnejemplar to set
+	 */
+	public void setTxtIsbnejemplar(JTextField txtIsbnejemplar) {
+		this.txtIsbnejemplar = txtIsbnejemplar;
+	}
+
+	/**
+	 * @return the txtTitulo
+	 */
+	public JTextField getTxtTitulo() {
+		return txtTitulo;
+	}
+
+	/**
+	 * @param txtTitulo the txtTitulo to set
+	 */
+	public void setTxtTitulo(JTextField txtTitulo) {
+		this.txtTitulo = txtTitulo;
+	}
+
+	/**
+	 * @return the txtNumeroejemplar
+	 */
+	public JTextField getTxtNumeroejemplar() {
+		return txtNumeroejemplar;
+	}
+
+	/**
+	 * @param txtNumeroejemplar the txtNumeroejemplar to set
+	 */
+	public void setTxtNumeroejemplar(JTextField txtNumeroejemplar) {
+		this.txtNumeroejemplar = txtNumeroejemplar;
+	}
+
+	/**
+	 * @return the table
+	 */
+	public JTable getTable() {
+		return table;
+	}
+
+	/**
+	 * @param table the table to set
+	 */
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+	
+	
 }
