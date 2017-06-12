@@ -6,8 +6,10 @@ import java.util.List;
 
 import javax.sql.rowset.Joinable;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableModel;
 import javax.swing.text.TableView.TableRow;
 
 import modelo.Ejemplar;
@@ -27,8 +29,7 @@ public class Controlador implements ActionListener {
 		super();
 		this.vista = vista;
 		this.ejemplarDAO = ejemplarDAO;
-		listaUsuarios = ejemplarDAO.obtenerListaEjemplares() ;
-		pintarUsuario(vista.getTable().getSelectedRow()+1);
+		//listaUsuarios = ejemplarDAO.obtenerListaEjemplares() ;
 		actionListener(this);
 		
 		
@@ -36,42 +37,69 @@ public class Controlador implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e){
 		switch (e.getActionCommand()) {
-		case ("<"):
-			contador1--;
-			if (contador1 < 0)
-				contador1 = listaUsuarios.size() - 1;
-			System.out.println(listaUsuarios.size() + " " + contador1);
-			pintarUsuario(contador1);
+		case ("Gestionar Usuarios"):
+			vista.getPanelUsuarios().setVisible(true);
+		    vista.getPanelEjemplares().setVisible(false);
+		    vista.getPanelLibros().setVisible(false);
+		    vista.getPanelPrestamos().setVisible(false);
 			break;
-		case (">"):
-			contador1++;
-			if (contador1 == listaUsuarios.size())
-				contador1 = 0;
-			System.out.println(listaUsuarios.size() + " " + contador1);
-			pintarUsuario(contador1);
+			
+		case ("Gestionar Libros"):
+			vista.getPanelUsuarios().setVisible(false);
+	    		vista.getPanelEjemplares().setVisible(false);
+	    		vista.getPanelLibros().setVisible(true);
+	    		vista.getPanelPrestamos().setVisible(false);
 			break;
-		case (">>"):
-			contador1 += 25;
-			if (contador1 >= listaUsuarios.size())
-				contador1 = 0;
-			System.out.println(listaUsuarios.size() + " " + contador1);
-			pintarUsuario(contador1);
+			
+		case ("Gestionar Ejemplares"):
+			vista.getPanelUsuarios().setVisible(false);
+	    		vista.getPanelEjemplares().setVisible(true);
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelPrestamos().setVisible(false);
 			break;
-		case ("<<"):
-			contador1 -= 25;
-			if (contador1 < 0)
-				contador1 = listaUsuarios.size() - 1;
-			System.out.println(listaUsuarios.size() + " " + contador1);
-			pintarUsuario(contador1);
+			
+		case ("Gestionar Préstamos"):
+			vista.getPanelUsuarios().setVisible(false);
+	    		vista.getPanelEjemplares().setVisible(false);
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelPrestamos().setVisible(true);
 			break;
+			
 		case ("Salir"):
-			System.out.println("porfin");
-			int  o = vista.getTable().getSelectedRow();
-			vista.getTxtIsbnejemplar().setText(listaUsuarios.get(vista.getTable().getSelectedRow()).getIsbnEjemplar());
-
-			System.out.println(o);
+			vista.getPanelUsuarios().setVisible(false);
+	    		vista.getPanelEjemplares().setVisible(false);
+	    		vista.getPanelLibros().setVisible(true);
+	    		vista.getPanelPrestamos().setVisible(false);
 			break;
-
+		
+		case ("Añadir nuevo ejemplar"):
+			if (vista.getTable().getSelectedRow() >= 0) {
+				Object isbn = vista.getTable().getValueAt(vista.getTable().getSelectedRow(), 0);
+				ejemplarDAO.crearEjemplar(new Ejemplar(isbn.toString(), 1));	
+				vista.getTextFieldInformacionAlUsuario().setText("Ejemplar añadido correctamente");
+				refrescarTabla();
+				limpiaCampos();				
+			} else {
+				vista.getTextFieldInformacionAlUsuario().setText("No hay ejemplar seleccionado");
+			}
+			break;
+		
+		case ("Borrar Ejemplar"):
+			if (vista.getTable().getSelectedRow() >= 0) {
+				Object isbn = vista.getTable().getValueAt(vista.getTable().getSelectedRow(), 0);
+				Object numero_ejemplar = vista.getTable().getValueAt(vista.getTable().getSelectedRow(), 1);
+				ejemplarDAO.borrarEjemplar(new Ejemplar(isbn.toString(), (int) numero_ejemplar));	
+				vista.getTextFieldInformacionAlUsuario().setText("Ejemplar borrado correctamente");
+				refrescarTabla();
+				limpiaCampos();				
+			} else {
+				vista.getTextFieldInformacionAlUsuario().setText("No hay ejemplar seleccionado");
+			}
+			break;
+			
+			
+			
+			
 		case ("Borrar"):
 			ejemplarDAO.borrarEjemplar(listaUsuarios.get(contador1));
 			
@@ -85,21 +113,24 @@ public class Controlador implements ActionListener {
 	private void actionListener(ActionListener escuchador) {
 		// TODO Apéndice de método generado automáticamente
 		vista.getMntmSalir().addActionListener(escuchador);
-		////vista.getTable().add;
+		vista.getMnEjemplares().addActionListener(escuchador);
+		vista.getMnPrestamos().addActionListener(escuchador);
+		vista.getMnUsuarios().addActionListener(escuchador);
+		vista.getMnLibros().addActionListener(escuchador);
+		vista.getMntmGestionarEjemplares().addActionListener(escuchador);
+		vista.getMntmGestionarLibros().addActionListener(escuchador);
+		vista.getMntmGestionarPrstamos().addActionListener(escuchador);
+		vista.getMntmGestionarUsuarios().addActionListener(escuchador);
+		vista.getBtnAadirEjemplar().addActionListener(escuchador);
+		vista.getBtnBorrarEjemplar().addActionListener(escuchador);
+		vista.getBtnBuscarEjemplar().addActionListener(escuchador);
+		vista.getTextFieldInformacionAlUsuario().addActionListener(escuchador);
 		
-		//vista.getBtnAvanzar25().addActionListener(escuchador);
-		//vista.getBtnRetroceder1().addActionListener(escuchador);
-		//vista.getBtnRetroceder25().addActionListener(escuchador);
-		//vista.getBtnEliminar().addActionListener(escuchador);
-		//vista.getBtnGuardar().addActionListener(escuchador);
-		//vista.getBtnInsertar().addActionListener(escuchador);
-		//vista.getMnCrud().addActionListener(escuchador);
-		//vista.getMntmBorrar().addActionListener(escuchador);
-		//vista.getMntmCrear().addActionListener(escuchador);
-		//vista.getTxtIsbnejemplar()
+
 		vista.getTable().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
 			try {
                 if (vista.getTable().getSelectedRow() >= 0) {
+                	
                     Object isbn = vista.getTable().getValueAt(vista.getTable().getSelectedRow(), 0);
                     Object numero_ejemplar = vista.getTable().getValueAt(vista.getTable().getSelectedRow(), 1);
                     Object titulo = vista.getTable().getValueAt(vista.getTable().getSelectedRow(), 2);
@@ -119,24 +150,27 @@ public class Controlador implements ActionListener {
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-		
-		
 		});
 		
 	}
-	
-	private void pintarUsuario(int i) {
-		int o = vista.getTable().getSelectedRow();
-		System.out.println(o);
-		// TODO Apéndice de método generado automáticamente
-		//vista.getTxtLogin().setText(listaUsuarios.get(i).getLogin());
-		//vista.getTxtPassword().setText(listaUsuarios.get(i).getPassword());
-		//vista.getTxtCode().setText(listaUsuarios.get(i).getCode());
-		//vista.getTxtGender().setText(listaUsuarios.get(i).getGender());
-		vista.getTxtIsbnejemplar().setText(listaUsuarios.get(vista.getTable().getSelectedRow()+1).getIsbnEjemplar());
+	public void limpiaCampos() {
+		vista.getTxtIsbnejemplar().setText("");
+        vista.getTxtTitulo().setText("");
+        vista.getTxtAutor().setText("");
+        vista.getTxtEditorial().setText("");
+        vista.getTxtEdicion().setText("");
+        vista.getTxtNumeroejemplar().setText("");
 	}
 	
-	private void ese(){
+	public void refrescarTabla() {
+		ModeloTablaEjemplares.setData(EjemplarDAO.listaAMatriz(new EjemplarDAO().obtenerListaEjemplares()));
+		vista.getTable().setModel(new controlador.ModeloTablaEjemplares());
+		vista.getColumnModel().getColumn(0).setPreferredWidth(24);
+		vista.getColumnModel().getColumn(1).setPreferredWidth(4);
+		vista.getColumnModel().getColumn(2).setPreferredWidth(150);
+		vista.getColumnModel().getColumn(3).setPreferredWidth(40);
+		vista.getColumnModel().getColumn(4).setPreferredWidth(200);
+		vista.getColumnModel().getColumn(5).setPreferredWidth(4);
+	}
 
-		}
 }

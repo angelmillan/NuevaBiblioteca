@@ -139,7 +139,7 @@ public class EjemplarDAO implements IEjemplarDAO {
 	public boolean crearEjemplar(Ejemplar ejemplar) {
 		
 		filas=0;
-		sql = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT COUNT(ISBN_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
+		sql = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
 		Connection conexion = Conexion.getInstance();
 	
 		try {
@@ -159,10 +159,10 @@ public class EjemplarDAO implements IEjemplarDAO {
 	public boolean borrarEjemplar(Ejemplar ejemplar) {
 		filas = 0;
 		// TODO Auto-generated method stub
-		/*
+		
 		sql = "DELETE FROM ejemplares WHERE isbn_ejemplar=? AND numero_ejemplar=?;";
 		Connection conexion = Conexion.getInstance();
-		filas = 0;
+	
 		try {
 			preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
@@ -174,7 +174,7 @@ public class EjemplarDAO implements IEjemplarDAO {
 			JOptionPane.showMessageDialog(null, "Problema borrar el libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 
 		}
-		*/
+		
 		
 		//***********************************************************************
 		/*
