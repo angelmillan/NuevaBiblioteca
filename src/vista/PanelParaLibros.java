@@ -10,18 +10,12 @@ import javax.swing.JTextField;
 import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.TableRowSorter;
-
 import controlador.ModeloTablaLibros;
-import modelo.Libro;
-
 import javax.swing.border.EtchedBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

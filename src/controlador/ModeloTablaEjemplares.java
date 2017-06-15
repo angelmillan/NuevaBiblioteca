@@ -15,7 +15,7 @@ public class ModeloTablaEjemplares extends AbstractTableModel implements TableMo
 	
 
 	private static String[] columnNames = {"ISBN",
-            "Nº Ejemplar",
+			"Nº Ejemplar",
             "Título",
             "Autor",
             "Editorial",
@@ -46,12 +46,6 @@ public class ModeloTablaEjemplares extends AbstractTableModel implements TableMo
         fireTableCellUpdated(row, col);
     }
 	
-	@Override
-	
-	public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
-
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		// TODO Auto-generated method stub

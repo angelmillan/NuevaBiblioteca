@@ -5,7 +5,6 @@ package controlador;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-
 import modelo.UsuarioDAO;
 
 
@@ -46,15 +45,8 @@ public class ModeloTablaUsuarios extends AbstractTableModel implements TableMode
 	
 
 	@Override
-	
-	public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
-
-	@Override
 	public void tableChanged(TableModelEvent e) {
-		// TODO Auto-generated method stub
-			
+		
 	}
 
 	@Override
@@ -74,7 +66,6 @@ public class ModeloTablaUsuarios extends AbstractTableModel implements TableMode
 
 	@Override
 	public String getColumnName(int column) {
-		// TODO Auto-generated method stub
 		return columnNames[column];
 	}
 	

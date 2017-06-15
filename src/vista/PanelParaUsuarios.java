@@ -6,22 +6,19 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Rectangle;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
-
 import controlador.ModeloTablaUsuarios;
-
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-
 import java.awt.SystemColor;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
+@SuppressWarnings("serial")
 public class PanelParaUsuarios extends JPanel {
 	private JTextField textDireccion;
 	private JTextField textDNI;

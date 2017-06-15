@@ -17,4 +17,7 @@ public interface ILibroDAO {
 	
 	boolean borrarLibro(Libro libro);
 	
+	boolean libroprestado(Libro libro);
+	
+	
 }

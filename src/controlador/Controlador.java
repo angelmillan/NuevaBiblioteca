@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import modelo.Ejemplar;
 import modelo.EjemplarDAO;
@@ -15,6 +13,7 @@ import modelo.Libro;
 import modelo.LibroDAO;
 import modelo.UsuarioDAO;
 import vista.Vista;
+
 /**
  * Public class Controlador
  * {@link ActionListener}

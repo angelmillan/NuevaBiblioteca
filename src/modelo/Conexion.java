@@ -29,9 +29,10 @@ public class Conexion {
 	}
 	// main para probar que funciona la conexión
 	
+	/*
 	public static void main(String[] args) {
 		Conexion.getInstance();
 		System.out.println(conexion);
 	}
-	
+	*/
 }

@@ -11,12 +11,14 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class UsuarioDAO implements IUsuarioDAO {
-	List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+	private boolean problemaSQLusuarioDAO = false; // Para controlar  problemas con la base de datos desde el controlador
+	List<Usuario> listaUsuarios = new ArrayList<Usuario>(); //Lista donde se carga la BD
 	String sql;
 	PreparedStatement preparedStatement;
 	Statement statement;
 	ResultSet resultSet;
 	int filas=0;
+	
 	
 	public UsuarioDAO() {
 		// TODO Auto-generated constructor stub
@@ -24,7 +26,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public List<Usuario> obtenerListadeUsuarios() {
-		
+		problemaSQLusuarioDAO = false; 
 		sql = "SELECT * FROM usuarios ORDER BY dni;";
 		Connection conexion = Conexion.getInstance();
 		try {
@@ -39,16 +41,15 @@ public class UsuarioDAO implements IUsuarioDAO {
 				listaUsuarios.add(usuario);
 			}
 		} catch (SQLException e) {
-			//System.out.println("Problema al leer los datos de la base de datos (obtenerListaLibros).");
+			problemaSQLusuarioDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema leer base de datos de Usuarios", "Problema SQL", JOptionPane.ERROR_MESSAGE);
-
 		}	
 		return listaUsuarios;
 	}
 
 	@Override
 	public boolean existeUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+		problemaSQLusuarioDAO = false;
 		filas = 0;
 		sql = "Select dni FROM usuarios WHERE dni=?;";
 		Connection conexion = Conexion.getInstance();
@@ -59,7 +60,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 			filas = preparedStatement.getUpdateCount();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			problemaSQLusuarioDAO = true;
 			//System.out.println("Problema al comprobar existencia del libro.");
 			JOptionPane.showMessageDialog(null, "Problema al comprobar existencia Usuario existeUsuario()", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
 		}
@@ -71,7 +72,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public boolean actualizarUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+		problemaSQLusuarioDAO = false;
 		filas = 0;
 		sql = "UPDATE usuarios SET nombre=?, apellidos=?, direccion=? WHERE dni=?;";
 		Connection conexion = Conexion.getInstance();
@@ -85,7 +86,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 			filas = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			problemaSQLusuarioDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema al actualizar el Usuario", "Problema SQL", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Problema al actualizar el Libro");
 		}
@@ -97,7 +98,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public boolean crearUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+		problemaSQLusuarioDAO = false;
 		filas=0;
 		sql = "INSERT INTO usuarios(dni, nombre, apellidos, direccion) values(?,?,?,?);";
 		Connection conexion = Conexion.getInstance();
@@ -110,7 +111,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 			preparedStatement.setString(4, usuario.getDireccion());
 			filas = preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			//System.out.println("Problema al crear el Libro.");
+			problemaSQLusuarioDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema crear el Usuario", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
 		if(filas!=0)
@@ -121,8 +122,8 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public Usuario obtenerUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		Usuario us = null;
+		problemaSQLusuarioDAO = false;
+		Usuario user = null;
 		sql = "SELECT * FROM usuarios WHERE dni=?;";
 		Connection conexion = Conexion.getInstance();
 		try {
@@ -133,17 +134,17 @@ public class UsuarioDAO implements IUsuarioDAO {
 			String nombre = resultSet.getString("nombre");
 			String apellidos = resultSet.getString("apellidos");
 			String direccion = resultSet.getString("direccion");
-			
-			us = new Usuario(dni, nombre, apellidos, direccion);	
+			user = new Usuario(dni, nombre, apellidos, direccion);	
 		} catch (SQLException e) {
+			problemaSQLusuarioDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema obtener usuario", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
-		return us;
+		return user;
 	}
 
 	@Override
 	public boolean borrarUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+		problemaSQLusuarioDAO = false;
 		sql = "DELETE FROM usuarios WHERE dni=?;";
 		Connection conexion = Conexion.getInstance();
 		filas = 0;
@@ -153,9 +154,8 @@ public class UsuarioDAO implements IUsuarioDAO {
 			filas = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			problemaSQLusuarioDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema borrar el Usuario", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
-
 		}
 		
 		if(filas!=0)
@@ -174,9 +174,24 @@ public class UsuarioDAO implements IUsuarioDAO {
 			}
 		
 		return matriz;	
-		}
+	}
+
+	/**
+	 * @return the problemaSQLusuarioDAO
+	 */
+	public boolean isProblemaSQLusuarioDAO() {
+		return problemaSQLusuarioDAO;
+	}
+
+	/**
+	 * @param problemaSQLusuarioDAO the problemaSQLusuarioDAO to set
+	 */
+	public void setProblemaSQLusuarioDAO(boolean problemaSQLusuarioDAO) {
+		this.problemaSQLusuarioDAO = problemaSQLusuarioDAO;
+	}
 	
 	
+	/*
 	public static void main(String[] args) {
 		//System.out.println(new UsuarioDAO().obtenerListadeUsuarios());
 		
@@ -189,13 +204,13 @@ public class UsuarioDAO implements IUsuarioDAO {
 		//System.out.println(new UsuarioDAO().existeUsuario(us));
 		
 		//System.out.println(l);
-		List <Usuario> lista = new UsuarioDAO().obtenerListadeUsuarios();
-		Object [][] data = new UsuarioDAO().listaAMatriz(new UsuarioDAO().obtenerListadeUsuarios());
+		//List <Usuario> lista = new UsuarioDAO().obtenerListadeUsuarios();
+		//Object [][] data = new UsuarioDAO().listaAMatriz(new UsuarioDAO().obtenerListadeUsuarios());
 		//for (int i=0 ; i < lista.size() ;i++){
 		//	System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
 		//
 		//	}
 		
 	}
-	
+	*/
 }

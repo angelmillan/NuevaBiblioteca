@@ -45,17 +45,9 @@ public class ModeloTablaLibros extends AbstractTableModel implements TableModelL
         fireTableCellUpdated(row, col);
     }
 	
-
-	@Override
-	
-	public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
-
 	@Override
 	public void tableChanged(TableModelEvent e) {
-		// TODO Auto-generated method stub
-			
+		
 	}
 
 	@Override
@@ -75,7 +67,6 @@ public class ModeloTablaLibros extends AbstractTableModel implements TableModelL
 
 	@Override
 	public String getColumnName(int column) {
-		// TODO Auto-generated method stub
 		return columnNames[column];
 	}
 	

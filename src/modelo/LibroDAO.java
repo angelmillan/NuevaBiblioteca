@@ -10,14 +10,15 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class LibroDAO implements ILibroDAO {
-	
+	private boolean problemaSQLLibroDAO = false; // Pra controlar  problemas con la base de datos desde el controlador
 	List<Libro> listaLibros = new ArrayList<Libro>();
+	
 	String sql;
 	PreparedStatement preparedStatement;
 	Statement statement;
 	ResultSet resultSet;
 	int filas=0;
-	private int flag = 0;
+
 	
 
 	public LibroDAO() {
@@ -26,6 +27,7 @@ public class LibroDAO implements ILibroDAO {
 
 	@Override
 	public List<Libro> obtenerListaLibros() {
+		problemaSQLLibroDAO = false;
 		sql = "SELECT * FROM libros ORDER BY isbn;";
 		Connection conexion = Conexion.getInstance();
 		try {
@@ -43,7 +45,7 @@ public class LibroDAO implements ILibroDAO {
 		} catch (SQLException e) {
 			//System.out.println("Problema al leer los datos de la base de datos (obtenerListaLibros).");
 			JOptionPane.showMessageDialog(null, "Problema leer base de datos de Libros", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
-
+			problemaSQLLibroDAO = true;
 		}
 		
 		return listaLibros;
@@ -52,6 +54,7 @@ public class LibroDAO implements ILibroDAO {
 	
 	@Override
 	public boolean existeLibro(Libro libro) {
+		problemaSQLLibroDAO = false;
 		filas = 0;
 		sql = "Select ISBN FROM libros WHERE ISBN=?;";
 		Connection conexion = Conexion.getInstance();
@@ -63,7 +66,7 @@ public class LibroDAO implements ILibroDAO {
 				filas++;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			problemaSQLLibroDAO = true;
 			//System.out.println("Problema al comprobar existencia del libro.");
 			JOptionPane.showMessageDialog(null, "Problema al comprobar existencia del Libro", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
 		}		
@@ -74,7 +77,7 @@ public class LibroDAO implements ILibroDAO {
 
 	@Override
 	public boolean actualizarLibro(Libro libro) {
-		// TODO Auto-generated method stub
+		problemaSQLLibroDAO = false;
 		filas = 0;
 		sql = "UPDATE Libros SET titulo=?, autor=?, editorial=?, edicion=? WHERE isbn=?;";
 		Connection conexion = Conexion.getInstance();
@@ -89,9 +92,9 @@ public class LibroDAO implements ILibroDAO {
 			filas = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			problemaSQLLibroDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema al actualizar el Libro", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
-			System.out.println("Problema al actualizar el Libro");
+			
 		}
 		
 		if(filas!=0)
@@ -102,9 +105,9 @@ public class LibroDAO implements ILibroDAO {
 
 	@Override
 	public boolean crearLibro (Libro libro) {
-		// TODO Auto-generated method stub
+		problemaSQLLibroDAO = false;
 		filas=0;
-		flag = 0;
+		problemaSQLLibroDAO = false;
 		sql = "INSERT INTO libros(isbn, titulo, autor, editorial, edicion) values(?,?,?,?,?);";
 		Connection conexion = Conexion.getInstance();
 	
@@ -118,9 +121,9 @@ public class LibroDAO implements ILibroDAO {
 			filas = preparedStatement.executeUpdate();	
 			System.out.println(libro);
 		} catch (SQLException e) {
-			//System.out.println("Problema al crear el Libro.");
+			problemaSQLLibroDAO = true;
 			JOptionPane.showMessageDialog(null, "El libro ya existe", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
-			flag = 1;
+			
 		}
 		if(filas!=0)
 			return true;
@@ -130,7 +133,7 @@ public class LibroDAO implements ILibroDAO {
 
 	@Override
 	public Libro obtenerLibro (Libro libro) {
-		// TODO Auto-generated method stub
+		problemaSQLLibroDAO = false;
 		Libro li=null;
 		sql = "SELECT * FROM libros WHERE isbn=?;";
 		Connection conexion = Conexion.getInstance();
@@ -145,6 +148,7 @@ public class LibroDAO implements ILibroDAO {
 			int edicion = resultSet.getInt("edicion");
 			li = new Libro(isbn, titulo, autor, editorial, edicion);	
 		} catch (SQLException e) {
+			problemaSQLLibroDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema obtener libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
 		return li;
@@ -152,7 +156,7 @@ public class LibroDAO implements ILibroDAO {
 
 	@Override
 	public boolean borrarLibro(Libro libro) {
-		// TODO Auto-generated method stub
+		problemaSQLLibroDAO = false;
 		sql = "DELETE FROM libros WHERE isbn=?;";
 		Connection conexion = Conexion.getInstance();
 		filas = 0;
@@ -164,7 +168,7 @@ public class LibroDAO implements ILibroDAO {
 				filas++;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			problemaSQLLibroDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema borrar el libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
 		if(filas!=0)
@@ -173,6 +177,7 @@ public class LibroDAO implements ILibroDAO {
 	}
 	
 	public boolean libroprestado(Libro libro) {
+		problemaSQLLibroDAO = false;
 		boolean prestado = false;
 		// Select * from prestamos where ISBN_PRESTAMO = '650797490-0' AND FECHA_PRESTAMO  is not "" AND FECHA_DEVOLUCION is NULL;
 		sql = "Select * from prestamos where isbn_prestamo = ?  AND fecha_prestamo is not null AND fecha_devolucion IS null;";
@@ -189,6 +194,7 @@ public class LibroDAO implements ILibroDAO {
 				if (filas != 0)
 					prestado = true;
 			} catch (SQLException e) {
+				problemaSQLLibroDAO = true;
 				JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar ejemplarprestado()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
 			}
 			
@@ -210,13 +216,29 @@ public class LibroDAO implements ILibroDAO {
 		}
 	
 
-	public static void main(String[] args) {
+	
+
+	/**
+	 * @return the problemaSQLLibroDAO
+	 */
+	public boolean isProblemaSQLLibroDAO() {
+		return problemaSQLLibroDAO;
+	}
+
+	/**
+	 * @param problemaSQLLibroDAO the problemaSQLLibroDAO to set
+	 */
+	public void setProblemaSQLLibroDAO(boolean problemaSQLLibroDAO) {
+		this.problemaSQLLibroDAO = problemaSQLLibroDAO;
+	}
+
+	//public static void main(String[] args) {
 		//System.out.println(new LibroDAO().obtenerListaLibros());
 		//List <Libro> listaLibros = new LibroDAO().obtenerListaLibros();
-		Libro l = new Libro("078859529-8","La Conjura de los necios","John Kennedy Tool","LaBellota",1979);
+		//Libro l = new Libro("078859529-8","La Conjura de los necios","John Kennedy Tool","LaBellota",1979);
 		//System.out.println(new LibroDAO().libroprestado(l));
 		//System.out.println(new LibroDAO().actualizarLibro(l));
-		System.out.println(new LibroDAO().crearLibro(l));
+		//System.out.println(new LibroDAO().crearLibro(l));
 		//System.out.println(new LibroDAO().existeLibro(l));
 		//System.out.println(new LibroDAO().obtenerLibro(l));
 		//System.out.println(l);
@@ -224,21 +246,9 @@ public class LibroDAO implements ILibroDAO {
 		//for (int i=0 ; i < listaLibros.size() ;i++){
 		//	System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
 		//	}
-	}
+	//}
 
-	/**
-	 * @return the flag
-	 */
-	public int getFlag() {
-		return flag;
-	}
-
-	/**
-	 * @param flag the flag to set
-	 */
-	public void setFlag(int flag) {
-		this.flag = flag;
-	}
+	
 	
 
 }

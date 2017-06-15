@@ -3,6 +3,7 @@ package modelo;
 import java.util.List;
 
 public interface IUsuarioDAO {
+	boolean problemaSQLusuarioDAO = false; // Pra controlar  problemas con la base de datos desde el controlador
 
 	List<Usuario> obtenerListadeUsuarios();
 	
