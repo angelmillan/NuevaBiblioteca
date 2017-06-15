@@ -17,6 +17,7 @@ public class LibroDAO implements ILibroDAO {
 	Statement statement;
 	ResultSet resultSet;
 	int filas=0;
+	private int flag = 0;
 	
 
 	public LibroDAO() {
@@ -56,16 +57,16 @@ public class LibroDAO implements ILibroDAO {
 		Connection conexion = Conexion.getInstance();
 		try {
 			preparedStatement = conexion.prepareStatement(sql);
-			preparedStatement.setString(1, libro.getIsbnLibro());
+			preparedStatement.setString(1, libro.getIsbnLibro().toString());
 			resultSet = preparedStatement.executeQuery();
-			filas = preparedStatement.getUpdateCount();
-
+			while (resultSet.next()){
+				filas++;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			//System.out.println("Problema al comprobar existencia del libro.");
 			JOptionPane.showMessageDialog(null, "Problema al comprobar existencia del Libro", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
-		}
-		
+		}		
 		if (filas != 0)		
 			return true;
 		return false;
@@ -103,6 +104,7 @@ public class LibroDAO implements ILibroDAO {
 	public boolean crearLibro (Libro libro) {
 		// TODO Auto-generated method stub
 		filas=0;
+		flag = 0;
 		sql = "INSERT INTO libros(isbn, titulo, autor, editorial, edicion) values(?,?,?,?,?);";
 		Connection conexion = Conexion.getInstance();
 	
@@ -113,13 +115,13 @@ public class LibroDAO implements ILibroDAO {
 			preparedStatement.setString(3, libro.getAutor());
 			preparedStatement.setString(4, libro.getEditorial());
 			preparedStatement.setInt(5, libro.getEdicion());
-			filas = preparedStatement.executeUpdate();
-		
+			filas = preparedStatement.executeUpdate();	
+			System.out.println(libro);
 		} catch (SQLException e) {
 			//System.out.println("Problema al crear el Libro.");
-			JOptionPane.showMessageDialog(null, "Problema crear el libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "El libro ya existe", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
+			flag = 1;
 		}
-		
 		if(filas!=0)
 			return true;
 		return false;
@@ -157,14 +159,14 @@ public class LibroDAO implements ILibroDAO {
 		try {
 			PreparedStatement preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, libro.getIsbnLibro());
-			filas = preparedStatement.executeUpdate();
-
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				filas++;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null, "Problema borrar el libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
-
 		}
-		
 		if(filas!=0)
 			return true;
 		return false;
@@ -181,8 +183,10 @@ public class LibroDAO implements ILibroDAO {
 				preparedStatement = conexion.prepareStatement(sql);
 				preparedStatement.setString(1, libro.getIsbnLibro());				
 				resultSet = preparedStatement.executeQuery();
-				filas = preparedStatement.getUpdateCount();
-				if (filas != -1)
+				while (resultSet.next()){
+					filas++;
+				}
+				if (filas != 0)
 					prestado = true;
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar ejemplarprestado()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
@@ -209,10 +213,10 @@ public class LibroDAO implements ILibroDAO {
 	public static void main(String[] args) {
 		//System.out.println(new LibroDAO().obtenerListaLibros());
 		//List <Libro> listaLibros = new LibroDAO().obtenerListaLibros();
-		Libro l = new Libro("078849629-7","La Conjura de los necios","John Kennedy Tool","LaBellota",1979);
-		System.out.println(new LibroDAO().existeLibro(l));
+		Libro l = new Libro("078859529-8","La Conjura de los necios","John Kennedy Tool","LaBellota",1979);
+		//System.out.println(new LibroDAO().libroprestado(l));
 		//System.out.println(new LibroDAO().actualizarLibro(l));
-		//System.out.println(new LibroDAO().crearLibro(l));
+		System.out.println(new LibroDAO().crearLibro(l));
 		//System.out.println(new LibroDAO().existeLibro(l));
 		//System.out.println(new LibroDAO().obtenerLibro(l));
 		//System.out.println(l);
@@ -220,6 +224,20 @@ public class LibroDAO implements ILibroDAO {
 		//for (int i=0 ; i < listaLibros.size() ;i++){
 		//	System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
 		//	}
+	}
+
+	/**
+	 * @return the flag
+	 */
+	public int getFlag() {
+		return flag;
+	}
+
+	/**
+	 * @param flag the flag to set
+	 */
+	public void setFlag(int flag) {
+		this.flag = flag;
 	}
 	
 

@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import modelo.Ejemplar;
 import modelo.EjemplarDAO;
@@ -189,37 +191,72 @@ public class Controlador implements ActionListener {
 		
 		case ("Añadir nuevo ejemplar de libro"):
 			System.out.println("boton Añadir nuevo ejemplar de libro");
+			if (vista.getPanelLibros().getTablaLibros().getSelectedRow() >= 0) {
+				int fila = vista.getPanelLibros().getTablaLibros().getSelectedRow();
+				Object isbn = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 0);
+				ejemplarDAO.crearEjemplar(new Ejemplar(isbn.toString(), 1));	
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
+				vista.getPanelLibros().getTextMensajes().setText("Ejemplar añadido correctamente");
+				limpiaCamposEjemplares();
+				refrescarTablaEjemplares();			
+			} else {
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
+				vista.getPanelLibros().getTextMensajes().setText("No hay ejemplar seleccionado para añadir");
+			}
 			break;
 			
 		case("Guardar Libro"):
+			
+			Object isbn = vista.getPanelLibros().getTextISBN().getText().trim();
+			Object titulo = vista.getPanelLibros().getTextTitulo().getText().trim();
+			Object autor = vista.getPanelLibros().getTextAutor().getText().trim();
+			Object editorial = vista.getPanelLibros().getTextEditorial().getText().trim();
+			Object edicion = vista.getPanelLibros().getTextEdicion().getText().toString();
+			//int edicion = (int) vista.getPanelLibros().getTextEdicion().getText();
+			//int edicion = Integer.parseInt(vista.getPanelLibros().getTextEdicion().getText());
+			
+			//Comprueba formato del ISBN con REGEXP
+			if (!comprobarISBN(isbn.toString())) {
+				System.out.println(!comprobarISBN(isbn.toString()));
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
+				vista.getPanelLibros().getTextMensajes().setText("El ISBN no es correcto formato debe ser xxxxxxxxx-x regexp (^\\d{9}[-][\\d|X]$)");
+				vista.getPanelLibros().getTextISBN().setText("");
+				break;
+			}
 				
-				if (!comprobarISBN(vista.getPanelLibros().getTextISBN().getText())) {
-					vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
-					vista.getPanelLibros().getTextMensajes().setText("El ISBN no es correcto formato debe ser xxxxxxxxx-x");
-					vista.getPanelLibros().getTextISBN().setText("");
-					break;
-				}
-				
-				System.out.println(libroDAO.existeLibro(new Libro(vista.getPanelLibros().getTextISBN().getText())));
-				if (libroDAO.existeLibro(new Libro(vista.getPanelLibros().getTextISBN().getText()))) {
-					vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
-					vista.getPanelLibros().getTextMensajes().setText("El ISBN del libro ya exite, no pueden estar duplicados");
-					vista.getPanelLibros().getTextISBN().setText("");
-					break;
-				}
-				
-				if (vista.getPanelLibros().getTextTitulo().getText().length() == 0) {
-					vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
-					vista.getPanelLibros().getTextMensajes().setText("ISBN correcto pero el Título del Libro no puede está vacio");
-					break;
-				}
-				// logica de guardado
-				
-				vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
-				vista.getPanelLibros().getTextMensajes().setText("Libro agregado correctamente a la base de datos");
-				volverOcultosTextFieldsPaneldeLibros();
+			// comprueba si existe el ISBN en la BD	
+			if (libroDAO.existeLibro(new Libro(isbn.toString()))) {
+				System.out.println(libroDAO.existeLibro(new Libro(isbn.toString())));
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
+				vista.getPanelLibros().getTextMensajes().setText("El ISBN del libro ya exite, no pueden estar duplicados");
+				vista.getPanelLibros().getTextISBN().setText("");
+				break;
+			}
+			
+			// comprueba que el titulo no está vacio
+			if (titulo.toString().length() == 0) {
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
+				vista.getPanelLibros().getTextMensajes().setText("ISBN correcto pero el Título del Libro no puede está vacio");
+				break;
+			}
+			// Guarda el libro en la BD
+			
+			System.out.println(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString())));
+			libroDAO.crearLibro(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString())));
+			System.out.println(libroDAO.crearLibro(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString()))));
+			vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
+			vista.getPanelLibros().getTextMensajes().setText("Libro agregado correctamente a la base de datos");
+			// Desactiva los JTextField y botones del Panel Libros
+			volverOcultosTextFieldsPaneldeLibros();
+			refrescarTablaLibros();
+			break;
+			
+		case("Cancelar libro"):
+			volverOcultosTextFieldsPaneldeLibros();
+			refrescarTablaLibros();
 			break;
 		
+			
 		// Botones del Panel Usuarios
 
 		case("Añadir nuevo Usuario"):
@@ -242,6 +279,10 @@ public class Controlador implements ActionListener {
 	/**
 	 * Método del controlador donde se incluyen los Listeners de los elementos de la aplicacion
 	 * @param escuchador
+	 * @param event
+	 * {@link ActionListener}
+	 * {@link ActionEvent}
+	 * {@link ListSelectionEvent}
 	 */
 	private void actionListener(ActionListener escuchador) {
 		// Listeners de botones del Menu general
@@ -265,90 +306,24 @@ public class Controlador implements ActionListener {
 		vista.getPanelUsuarios().getBtnBorrarUsuario().addActionListener(escuchador);
 		vista.getPanelUsuarios().getBtnModificarUsuario().addActionListener(escuchador);
 		
-		/** Listener para JTable del Panel Ejemplares
-		 * Obtiene datos de la fila del JTable seleccionado 
-		 * Los introduce en el JTextField correspondiente
-		 */
+		// Listener ListSelectionEvent para JTable del Panel Ejemplares Obtiene datos de la fila del JTable seleccionado 
+		//Los introduce en el JTextField correspondiente mediante accionEventoTablaEjemplares();	
+		
 		vista.getPanelEjemplares().getTabla_Ejemplares().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-			try {
-				int fila = vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow();
-                if (vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow() >= 0) {
-                		
-                		Object isbn = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 0);
-                		Object numero_ejemplar = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 1);
-                    Object titulo = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 2);
-                    Object autor = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 3);
-                    Object editorial = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 4);
-                		Object edicion = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 5);
-
-                		vista.getPanelEjemplares().getTextField_ISBN_Ejemplar().setText(isbn.toString());
-                		vista.getPanelEjemplares().getTextField_NUmero_Ejemplar().setText(numero_ejemplar.toString());
-                		vista.getPanelEjemplares().getTextField_Titulo_Ejemplar().setText(titulo.toString());
-                    vista.getPanelEjemplares().getTextField_Autor_Ejemplar().setText(autor.toString());
-                    vista.getPanelEjemplares().getTextField_Editorial_Ejemplar().setText(editorial.toString());
-                    vista.getPanelEjemplares().getTextField_Edicion_Ejemplar().setText(edicion.toString());
-       
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
+			accionEventoTablaEjemplares();	
 		});
 		
-		/** Listener para JTable del Panel Libros
-		 * Obtiene datos de la fila del JTable seleccionado 
-		 * Los introduce en el JTextField correspondiente
-		 */
+		// Listener ListSelectionEvent para JTable del Panel Libros Obtiene datos de la fila del JTable seleccionado 
+		// Los introduce en el JTextField correspondiente mediante accionEventoTablaLibros();
 		vista.getPanelLibros().getTablaLibros().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-			try {
-				int fila = vista.getPanelLibros().getTablaLibros().getSelectedRow();
-				if (vista.getPanelLibros().getTablaLibros().getSelectedRow() >= 0) {
-					Object isbn = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 0);
-					Object titulo = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 1);
-					Object autor = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 2);
-					Object editorial = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 3);
-					Object edicion = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 4);
-					
-					vista.getPanelLibros().getTextISBN().setText(isbn.toString());
-					vista.getPanelLibros().getTextTitulo().setText(titulo.toString());
-					vista.getPanelLibros().getTextAutor().setText(autor.toString());
-					vista.getPanelLibros().getTextEditorial().setText(editorial.toString());
-					vista.getPanelLibros().getTextEdicion().setText(edicion.toString());
-	
-				}
-			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
-			}
-			
+			accionEventoTablaLibros();	
 		});
 		
-		/** Listener para JTable del Panel Usuarios
-		 * Obtiene datos de la fila del JTable seleccionado 
-		 * Los introduce en el JTextField correspondiente
-		 */
+		//Listener para JTable del Panel Usuarios Obtiene datos de la fila del JTable seleccionado 
+		// Los introduce en el JTextField correspondiente ListSelectionEvent
 		vista.getPanelUsuarios().getTableUsuarios().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-			try {
-				int fila = vista.getPanelUsuarios().getTableUsuarios().getSelectedRow();
-				if (vista.getPanelUsuarios().getTableUsuarios().getSelectedRow() >= 0) {
-					Object dni = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 0);
-					Object nombre = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 1);
-					Object apellidos = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 2);
-					Object direccion = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 3);
-
-					vista.getPanelUsuarios().getTextDNI().setText(dni.toString());
-					vista.getPanelUsuarios().getTextNombre().setText(nombre.toString());
-					vista.getPanelUsuarios().getTextApellidos().setText(apellidos.toString());
-					vista.getPanelUsuarios().getTextDireccion().setText(direccion.toString());
-					
-	
-				}
-			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
-			}
-			
-			
-		});
-		
-		
+			accionEventoTablaEsuarios();	
+		});	
 	}
 	
 	/**
@@ -441,7 +416,9 @@ public class Controlador implements ActionListener {
 		vista.getPanelLibros().getBtnCancelarLibro().setVisible(true);
 		
 	}
-	
+	/**
+	 * volverOcultosTextFieldsPaneldeLibros() oculta los Texfiel y Botones necesario para añadir o editar Libros
+	 */
 	public void volverOcultosTextFieldsPaneldeLibros() {
 		
 		vista.getPanelLibros().getTextISBN().setEditable(false);
@@ -465,12 +442,96 @@ public class Controlador implements ActionListener {
 	}
 	/**
 	 * Comprueba que el ISBN tiene el formato correcto
-	 * @param Cadena
-	 * @return coincide
+	 * @param Cadena es un ISBN a comprobar
+	 * @return true si coincide con la expresión regular (^\\d{9}[-][\\d|X]$)
 	 */
 	public boolean comprobarISBN (String cadena) {
 		Pattern patron = Pattern.compile("^\\d{9}[-][\\d|X]$");
 		Matcher mat = patron.matcher(cadena);
 		return mat.matches();
+	}
+	/**
+	 * 
+	 * @param cadena es un DNI o NIE a comprobar
+	 * @return true si la cadena coincide con la expresion regular (^\\d{9}[-][\\d|X]$ (([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1})))
+	 */
+	public boolean comprobarDNIoNIE (String cadena) {
+		Pattern patron = Pattern.compile("^\\d{9}[-][\\d|X]$ (([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))");
+		Matcher mat = patron.matcher(cadena);
+		return mat.matches();
+	}
+	
+	
+	
+	/** Acción que dispara el Listener para JTable del Panel Ejemplares
+	 * Obtiene datos de la fila del JTable seleccionado 
+	 * Los introduce en el JTextField correspondiente
+	 */
+	public void accionEventoTablaEjemplares() {
+		try {
+			int fila = vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow();
+            if (vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow() >= 0) {
+            		
+            		Object isbn = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 0);
+            		Object numero_ejemplar = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 1);
+                Object titulo = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 2);
+                Object autor = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 3);
+                Object editorial = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 4);
+            		Object edicion = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 5);
+
+            		vista.getPanelEjemplares().getTextField_ISBN_Ejemplar().setText(isbn.toString());
+            		vista.getPanelEjemplares().getTextField_NUmero_Ejemplar().setText(numero_ejemplar.toString());
+            		vista.getPanelEjemplares().getTextField_Titulo_Ejemplar().setText(titulo.toString());
+                vista.getPanelEjemplares().getTextField_Autor_Ejemplar().setText(autor.toString());
+                vista.getPanelEjemplares().getTextField_Editorial_Ejemplar().setText(editorial.toString());
+                vista.getPanelEjemplares().getTextField_Edicion_Ejemplar().setText(edicion.toString());
+   
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+	}
+	
+	public void accionEventoTablaEsuarios() {
+		try {
+			int fila = vista.getPanelUsuarios().getTableUsuarios().getSelectedRow();
+			if (vista.getPanelUsuarios().getTableUsuarios().getSelectedRow() >= 0) {
+				Object dni = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 0);
+				Object nombre = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 1);
+				Object apellidos = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 2);
+				Object direccion = vista.getPanelUsuarios().getTableUsuarios().getValueAt(fila, 3);
+
+				vista.getPanelUsuarios().getTextDNI().setText(dni.toString());
+				vista.getPanelUsuarios().getTextNombre().setText(nombre.toString());
+				vista.getPanelUsuarios().getTextApellidos().setText(apellidos.toString());
+				vista.getPanelUsuarios().getTextDireccion().setText(direccion.toString());
+				
+
+			}
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
+	
+	public void accionEventoTablaLibros() {
+		try {
+			int fila = vista.getPanelLibros().getTablaLibros().getSelectedRow();
+			if (vista.getPanelLibros().getTablaLibros().getSelectedRow() >= 0) {
+				Object isbn = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 0);
+				Object titulo = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 1);
+				Object autor = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 2);
+				Object editorial = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 3);
+				Object edicion = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 4);
+				
+				vista.getPanelLibros().getTextISBN().setText(isbn.toString());
+				vista.getPanelLibros().getTextTitulo().setText(titulo.toString());
+				vista.getPanelLibros().getTextAutor().setText(autor.toString());
+				vista.getPanelLibros().getTextEditorial().setText(editorial.toString());
+				vista.getPanelLibros().getTextEdicion().setText(edicion.toString());
+
+			}
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 }
