@@ -7,6 +7,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
@@ -216,6 +218,8 @@ public class PanelParaEjemplares extends JPanel {
 		tabla_Ejemplares = new JTable(new ModeloTablaEjemplares());
 		scrollPane.setViewportView(tabla_Ejemplares);
 		setLayout(groupLayout);
+		tabla_Ejemplares.setAutoCreateRowSorter(true);
+		tabla_Ejemplares.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabla_Ejemplares.setModel(new controlador.ModeloTablaEjemplares());
 		tabla_Ejemplares.getColumnModel().getColumn(0).setPreferredWidth(24);
 		tabla_Ejemplares.getColumnModel().getColumn(1).setPreferredWidth(4);

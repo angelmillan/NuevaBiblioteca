@@ -15,6 +15,10 @@ public class Libro {
 		this.edicion = edicion;
 	}
 	
+	public Libro (String isbnLibro) {
+		this.isbnLibro = isbnLibro;
+	}
+	
 	/**
 	 * @return the isbnLibro
 	 */

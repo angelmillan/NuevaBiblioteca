@@ -6,34 +6,32 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
-
-import modelo.EjemplarDAO;
+import modelo.UsuarioDAO;
 
 
 @SuppressWarnings("serial")
-public class ModeloTablaEjemplares extends AbstractTableModel implements TableModelListener {
+public class ModeloTablaUsuarios extends AbstractTableModel implements TableModelListener {
 	
 
-	private static String[] columnNames = {"ISBN",
-            "Nº Ejemplar",
-            "Título",
-            "Autor",
-            "Editorial",
-            "Edición"};
+	private static String[] columnNames = {
+           
+            "DNI",
+            "Nombre",
+            "Apellidos",
+            "Dirección"};
 	
-	private static Object[][] data = EjemplarDAO.listaAMatriz(new EjemplarDAO().obtenerListaEjemplares());
+	private static Object[][] data = UsuarioDAO.listaAMatriz(new UsuarioDAO().obtenerListadeUsuarios());
 	
 	
 	
-	public ModeloTablaEjemplares () {
+	public ModeloTablaUsuarios () {
 		addTableModelListener(this);
-		
 	}
 
 	
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		if (columnIndex < 6) {
+		if (columnIndex < 4) {
             return false;
         } else {
             return true;
@@ -46,6 +44,7 @@ public class ModeloTablaEjemplares extends AbstractTableModel implements TableMo
         fireTableCellUpdated(row, col);
     }
 	
+
 	@Override
 	
 	public Class getColumnClass(int c) {
@@ -90,7 +89,7 @@ public class ModeloTablaEjemplares extends AbstractTableModel implements TableMo
 	 * @param columnNames the columnNames to set
 	 */
 	public static void setColumnNames(String[] columnNames) {
-		ModeloTablaEjemplares.columnNames = columnNames;
+		ModeloTablaUsuarios.columnNames = columnNames;
 	}
 
 	/**
@@ -104,6 +103,8 @@ public class ModeloTablaEjemplares extends AbstractTableModel implements TableMo
 	 * @param data the data to set
 	 */
 	public static void setData(Object[][] data) {
-		ModeloTablaEjemplares.data = data;
+		ModeloTablaUsuarios.data = data;
 	}
+	
 }
+

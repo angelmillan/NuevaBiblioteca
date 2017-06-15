@@ -14,7 +14,8 @@ import javax.swing.JMenuItem;
 
 import controlador.Controlador;
 import modelo.EjemplarDAO;
-
+import modelo.LibroDAO;
+import modelo.UsuarioDAO;
 
 import java.awt.Rectangle;
 import javax.swing.GroupLayout;
@@ -54,7 +55,7 @@ public class Vista extends JFrame {
 				try {	
 					Vista frame = new Vista();
 					frame.setVisible(true);
-					new Controlador (frame, new EjemplarDAO());
+					new Controlador (frame, new EjemplarDAO(), new LibroDAO(), new UsuarioDAO());
 					
 				} 	catch (Exception e) {
 					e.printStackTrace();

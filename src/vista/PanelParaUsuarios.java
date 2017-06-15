@@ -6,10 +6,15 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Rectangle;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+
+import controlador.ModeloTablaUsuarios;
+
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import java.awt.SystemColor;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -18,13 +23,15 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 
 public class PanelParaUsuarios extends JPanel {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTable table;
+	private JTextField textDireccion;
+	private JTextField textDNI;
+	private JTextField textNombre;
+	private JTextField textApellidos;
+	private JTextField textMensaje;
+	private JTable tableUsuarios;
+	private JButton btnAddNuevoUsuario;
+	private JButton btnBorrarUsuario;
+	private JButton btnModificarUsuario;
 
 	/**
 	 * Create the panel.
@@ -41,54 +48,46 @@ public class PanelParaUsuarios extends JPanel {
 		
 		JLabel lblDireccin = new JLabel("Dirección");
 		
-		textField = new JTextField();
-		textField.setText("");
-		textField.setEditable(false);
-		textField.setColumns(10);
-		textField.setBackground(SystemColor.window);
-		
-		textField_1 = new JTextField();
-		textField_1.setText("");
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		textField_1.setBackground(SystemColor.window);
+		textDireccion = new JTextField();
+		textDireccion.setText("");
+		textDireccion.setEditable(false);
+		textDireccion.setColumns(10);
+		textDireccion.setBackground(SystemColor.window);
 		
 		JLabel lblApellidos = new JLabel("Apellidos");
 		
 		JLabel lblDni = new JLabel("D.N.I.");
 		
-		textField_2 = new JTextField();
-		textField_2.setText("");
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		textField_2.setBackground(SystemColor.window);
+		textDNI = new JTextField();
+		textDNI.setText("");
+		textDNI.setEditable(false);
+		textDNI.setColumns(10);
+		textDNI.setBackground(SystemColor.window);
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		
-		textField_4 = new JTextField();
-		textField_4.setText("");
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
-		textField_4.setBackground(SystemColor.window);
+		textNombre = new JTextField();
+		textNombre.setText("");
+		textNombre.setEditable(false);
+		textNombre.setColumns(10);
+		textNombre.setBackground(SystemColor.window);
 		
-		textField_5 = new JTextField();
-		textField_5.setText("");
-		textField_5.setEditable(false);
-		textField_5.setColumns(10);
-		textField_5.setBackground(SystemColor.window);
+		textApellidos = new JTextField();
+		textApellidos.setText("");
+		textApellidos.setEditable(false);
+		textApellidos.setColumns(10);
+		textApellidos.setBackground(SystemColor.window);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 838, Short.MAX_VALUE)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(41)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(lblDireccin)
 							.addGap(18)
-							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
-							.addGap(82)
-							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textDireccion, GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+							.addGap(212))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblApellidos)
@@ -96,53 +95,51 @@ public class PanelParaUsuarios extends JPanel {
 							.addGap(18)
 							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_panel.createSequentialGroup()
-									.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+									.addComponent(textDNI, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
 									.addGap(18)
 									.addComponent(lblNombre)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 541, GroupLayout.PREFERRED_SIZE))
-								.addComponent(textField_5, GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE))))
+									.addComponent(textNombre, GroupLayout.PREFERRED_SIZE, 541, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textApellidos, GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE))))
 					.addGap(17))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 132, Short.MAX_VALUE)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDni)
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textNombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textDNI, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNombre))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblApellidos)
-						.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textApellidos, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDireccin)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textDireccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 		
-		JButton btnAddNuevoUsuario = new JButton("Añadir nuevo Usuario");
+		btnAddNuevoUsuario = new JButton("Añadir nuevo Usuario");
 		btnAddNuevoUsuario.setBounds(new Rectangle(25, 25, 0, 0));
 		
-		JButton btnBorrarUsuario = new JButton("Borrar Usuario");
+		btnBorrarUsuario = new JButton("Borrar Usuario");
 		btnBorrarUsuario.setBounds(new Rectangle(25, 25, 0, 0));
 		
-		JButton btnBuscarUsuario = new JButton("Buscar Usuario");
-		btnBuscarUsuario.setBounds(new Rectangle(25, 25, 0, 0));
+		btnModificarUsuario = new JButton("Modificar Usuario");
+		btnModificarUsuario.setBounds(new Rectangle(25, 25, 0, 0));
 		
-		textField_6 = new JTextField();
-		textField_6.setForeground(Color.RED);
-		textField_6.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		textField_6.setEditable(false);
-		textField_6.setColumns(10);
-		textField_6.setBounds(new Rectangle(25, 25, 0, 0));
-		textField_6.setBackground(SystemColor.window);
+		textMensaje = new JTextField();
+		textMensaje.setForeground(Color.RED);
+		textMensaje.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		textMensaje.setEditable(false);
+		textMensaje.setColumns(10);
+		textMensaje.setBounds(new Rectangle(25, 25, 0, 0));
+		textMensaje.setBackground(SystemColor.window);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -156,10 +153,10 @@ public class PanelParaUsuarios extends JPanel {
 							.addGap(35)
 							.addComponent(btnBorrarUsuario, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
 							.addGap(37)
-							.addComponent(btnBuscarUsuario, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+							.addComponent(btnModificarUsuario, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(6)
-							.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(textMensaje, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(25, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -173,15 +170,83 @@ public class PanelParaUsuarios extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnAddNuevoUsuario)
 						.addComponent(btnBorrarUsuario)
-						.addComponent(btnBuscarUsuario))
+						.addComponent(btnModificarUsuario))
 					.addGap(12)
-					.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textMensaje, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		tableUsuarios = new JTable(new ModeloTablaUsuarios());
+		scrollPane.setViewportView(tableUsuarios);
+		tableUsuarios.setAutoCreateRowSorter(true);
+		tableUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		setLayout(groupLayout);
 
 	}
+
+	/**
+	 * @return the textDireccion
+	 */
+	public JTextField getTextDireccion() {
+		return textDireccion;
+	}
+
+	/**
+	 * @return the textDNI
+	 */
+	public JTextField getTextDNI() {
+		return textDNI;
+	}
+
+	/**
+	 * @return the textNombre
+	 */
+	public JTextField getTextNombre() {
+		return textNombre;
+	}
+
+	/**
+	 * @return the textApellidos
+	 */
+	public JTextField getTextApellidos() {
+		return textApellidos;
+	}
+
+	/**
+	 * @return the textMensaje
+	 */
+	public JTextField getTextMensaje() {
+		return textMensaje;
+	}
+
+	/**
+	 * @return the tableUsuarios
+	 */
+	public JTable getTableUsuarios() {
+		return tableUsuarios;
+	}
+
+	/**
+	 * @return the btnAddNuevoUsuario
+	 */
+	public JButton getBtnAddNuevoUsuario() {
+		return btnAddNuevoUsuario;
+	}
+
+	/**
+	 * @return the btnBorrarUsuario
+	 */
+	public JButton getBtnBorrarUsuario() {
+		return btnBorrarUsuario;
+	}
+
+	/**
+	 * @return the btnModificarUsuario
+	 */
+	public JButton getBtnModificarUsuario() {
+		return btnModificarUsuario;
+	}
+	
+	
 }

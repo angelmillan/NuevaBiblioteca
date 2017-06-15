@@ -10,15 +10,21 @@ import javax.swing.JTextField;
 import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.TableRowSorter;
 
 import controlador.ModeloTablaLibros;
+import modelo.Libro;
 
 import javax.swing.border.EtchedBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class PanelParaLibros extends JPanel {
@@ -26,13 +32,16 @@ public class PanelParaLibros extends JPanel {
 	private JTextField textAutor;
 	private JTextField textEdicion;
 	private JTextField textISBN;
-	private JTextField textField_4;
 	private JTextField textEditorial;
 	private JTextField textTitulo;
 	private JTable tablaLibros;
 	private JButton btnAadirNuevoLibro;
 	private JButton btnBorrarLibro;
 	private JButton btnModificarLibro;
+	private JButton btnAadirNuevoEjemplar;
+	private JButton btnGuardarLibro;
+	private JButton btnCancelarLibro;
+
 	//private ModeloTablaLibros tablaLibros;
 
 	/**
@@ -91,17 +100,6 @@ public class PanelParaLibros extends JPanel {
 		textISBN.setColumns(10);
 		textISBN.setBackground(SystemColor.window);
 		
-		JLabel lblEjemplares = new JLabel("Ejemplares\n");
-		
-		textField_4 = new JTextField();
-		textField_4.setText("");
-		textField_4.setHorizontalAlignment(SwingConstants.RIGHT);
-		textField_4.setForeground(new Color(128, 0, 0));
-		textField_4.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
-		textField_4.setBackground(SystemColor.window);
-		
 		JLabel label_5 = new JLabel("Editorial");
 		
 		textEditorial = new JTextField();
@@ -115,10 +113,15 @@ public class PanelParaLibros extends JPanel {
 		textTitulo.setEditable(false);
 		textTitulo.setColumns(10);
 		textTitulo.setBackground(SystemColor.window);
+		
+		btnGuardarLibro = new JButton("Guardar Libro");
+		btnGuardarLibro.setVisible(false);
+		
+		btnCancelarLibro = new JButton("Cancelar libro");
+		btnCancelarLibro.setVisible(false);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 850, Short.MAX_VALUE)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(41)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
@@ -135,49 +138,54 @@ public class PanelParaLibros extends JPanel {
 								.addComponent(label_2)
 								.addComponent(label_3))
 							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_panel.createSequentialGroup()
-									.addComponent(textISBN, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+									.addComponent(textISBN, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
 									.addGap(18)
-									.addComponent(lblEjemplares)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-									.addGap(51)
 									.addComponent(label_5)
-									.addGap(18)
-									.addComponent(textEditorial, GroupLayout.PREFERRED_SIZE, 357, GroupLayout.PREFERRED_SIZE))
-								.addComponent(textTitulo, GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE))))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(textEditorial, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textTitulo, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE))
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnCancelarLibro)
+								.addComponent(btnGuardarLibro))))
 					.addGap(17))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 156, Short.MAX_VALUE)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_3)
-						.addComponent(textEditorial, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textISBN, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(label_5)
-						.addComponent(lblEjemplares)
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textEditorial, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnGuardarLibro)
+						.addComponent(label_5))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_2)
-						.addComponent(textTitulo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textTitulo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnCancelarLibro))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label)
 						.addComponent(textAutor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(label_1)
 						.addComponent(textEdicion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(18, Short.MAX_VALUE))
+					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
+		
+		btnAadirNuevoEjemplar = new JButton("Añadir nuevo ejemplar de libro");
+		btnAadirNuevoEjemplar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(30, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
@@ -187,7 +195,9 @@ public class PanelParaLibros extends JPanel {
 							.addGap(35)
 							.addComponent(btnBorrarLibro, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
 							.addGap(37)
-							.addComponent(btnModificarLibro, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+							.addComponent(btnModificarLibro, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btnAadirNuevoEjemplar))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(6)
 							.addComponent(textMensajes, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE)))
@@ -196,7 +206,7 @@ public class PanelParaLibros extends JPanel {
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(17, Short.MAX_VALUE)
+					.addContainerGap(11, Short.MAX_VALUE)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
 					.addGap(12)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
@@ -204,7 +214,9 @@ public class PanelParaLibros extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnAadirNuevoLibro)
 						.addComponent(btnBorrarLibro)
-						.addComponent(btnModificarLibro))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnModificarLibro)
+							.addComponent(btnAadirNuevoEjemplar)))
 					.addGap(12)
 					.addComponent(textMensajes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
@@ -212,7 +224,10 @@ public class PanelParaLibros extends JPanel {
 		
 		tablaLibros = new JTable(new ModeloTablaLibros());
 		scrollPane.setViewportView(tablaLibros);
+		tablaLibros.setAutoCreateRowSorter(true);
+		tablaLibros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setLayout(groupLayout);
+		
 
 	}
 
@@ -224,26 +239,10 @@ public class PanelParaLibros extends JPanel {
 	}
 
 	/**
-	 * @param textMensajes the textMensajes to set
-	 */
-	public void setTextMensajes(JTextField textMensajes) {
-		this.textMensajes = textMensajes;
-	}
-
-
-
-	/**
 	 * @return the textAutor
 	 */
 	public JTextField getTextAutor() {
 		return textAutor;
-	}
-
-	/**
-	 * @param textAutor the textAutor to set
-	 */
-	public void setTextAutor(JTextField textAutor) {
-		this.textAutor = textAutor;
 	}
 
 	/**
@@ -254,38 +253,19 @@ public class PanelParaLibros extends JPanel {
 	}
 
 	/**
-	 * @param textEdicion the textEdicion to set
-	 */
-	public void setTextEdicion(JTextField textEdicion) {
-		this.textEdicion = textEdicion;
-	}
-
-	/**
 	 * @return the textISBN
 	 */
 	public JTextField getTextISBN() {
 		return textISBN;
 	}
 
-	/**
-	 * @param textISBN the textISBN to set
-	 */
-	public void setTextISBN(JTextField textISBN) {
-		this.textISBN = textISBN;
-	}
+
 
 	/**
 	 * @return the textEditorial
 	 */
 	public JTextField getTextEditorial() {
 		return textEditorial;
-	}
-
-	/**
-	 * @param textEditorial the textEditorial to set
-	 */
-	public void setTextEditorial(JTextField textEditorial) {
-		this.textEditorial = textEditorial;
 	}
 
 	/**
@@ -296,26 +276,52 @@ public class PanelParaLibros extends JPanel {
 	}
 
 	/**
-	 * @param textTitulo the textTitulo to set
+	 * @return the tablaLibros
 	 */
-	public void setTextTitulo(JTextField textTitulo) {
-		this.textTitulo = textTitulo;
-	}
-
-	/**
-	 * @return the tableLibros
-	 */
-	public JTable getTableLibros() {
+	public JTable getTablaLibros() {
 		return tablaLibros;
 	}
 
 	/**
-	 * @param tableLibros the tableLibros to set
+	 * @return the btnAadirNuevoLibro
 	 */
-	public void setTableLibros(JTable tablaLibros) {
-		this.tablaLibros = tablaLibros;
+	public JButton getBtnAadirNuevoLibro() {
+		return btnAadirNuevoLibro;
 	}
-	
-	
+
+	/**
+	 * @return the btnBorrarLibro
+	 */
+	public JButton getBtnBorrarLibro() {
+		return btnBorrarLibro;
+	}
+
+	/**
+	 * @return the btnModificarLibro
+	 */
+	public JButton getBtnModificarLibro() {
+		return btnModificarLibro;
+	}
+
+	/**
+	 * @return the btnAadirNuevoEjemplar
+	 */
+	public JButton getBtnAadirNuevoEjemplar() {
+		return btnAadirNuevoEjemplar;
+	}
+
+	/**
+	 * @return the btnGuardarLibro
+	 */
+	public JButton getBtnGuardarLibro() {
+		return btnGuardarLibro;
+	}
+
+	/**
+	 * @return the btnCancelarLibro
+	 */
+	public JButton getBtnCancelarLibro() {
+		return btnCancelarLibro;
+	}
 	
 }

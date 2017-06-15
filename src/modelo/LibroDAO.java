@@ -169,16 +169,37 @@ public class LibroDAO implements ILibroDAO {
 			return true;
 		return false;
 	}
-
-	public static Object [][] listaAMatriz (List<Libro> lista){
-		Object [][] matriz = new Object [lista.size()][5];
+	
+	public boolean libroprestado(Libro libro) {
+		boolean prestado = false;
+		// Select * from prestamos where ISBN_PRESTAMO = '650797490-0' AND FECHA_PRESTAMO  is not "" AND FECHA_DEVOLUCION is NULL;
+		sql = "Select * from prestamos where isbn_prestamo = ?  AND fecha_prestamo is not null AND fecha_devolucion IS null;";
 			
-			for (int i=0 ; i < lista.size() ;i++){
-			matriz[i][0] = lista.get(i).getIsbnLibro();
-			matriz[i][1] = lista.get(i).getTitulo();
-			matriz[i][2] = lista.get(i).getAutor();
-			matriz[i][3] = lista.get(i).getEditorial();
-			matriz[i][4] = lista.get(i).getEdicion();
+		Connection conexion = Conexion.getInstance();
+		
+			try {
+				preparedStatement = conexion.prepareStatement(sql);
+				preparedStatement.setString(1, libro.getIsbnLibro());				
+				resultSet = preparedStatement.executeQuery();
+				filas = preparedStatement.getUpdateCount();
+				if (filas != -1)
+					prestado = true;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar ejemplarprestado()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		return prestado;
+	}
+
+	public static Object [][] listaAMatriz (List<Libro> list){
+		Object [][] matriz = new Object [list.size()][5];
+			
+			for (int i=0 ; i < list.size() ;i++){
+			matriz[i][0] = list.get(i).getIsbnLibro();
+			matriz[i][1] = list.get(i).getTitulo();
+			matriz[i][2] = list.get(i).getAutor();
+			matriz[i][3] = list.get(i).getEditorial();
+			matriz[i][4] = list.get(i).getEdicion();
 			}
 		
 		return matriz;	
@@ -187,17 +208,18 @@ public class LibroDAO implements ILibroDAO {
 
 	public static void main(String[] args) {
 		//System.out.println(new LibroDAO().obtenerListaLibros());
-		List <Libro> listaLibros = new LibroDAO().obtenerListaLibros();
-		//Libro l = new Libro("25987663-1","La Conjura de los necios","John Kennedy Tool","LaBellota",1979);
+		//List <Libro> listaLibros = new LibroDAO().obtenerListaLibros();
+		Libro l = new Libro("078849629-7","La Conjura de los necios","John Kennedy Tool","LaBellota",1979);
+		System.out.println(new LibroDAO().existeLibro(l));
 		//System.out.println(new LibroDAO().actualizarLibro(l));
 		//System.out.println(new LibroDAO().crearLibro(l));
 		//System.out.println(new LibroDAO().existeLibro(l));
 		//System.out.println(new LibroDAO().obtenerLibro(l));
 		//System.out.println(l);
-		Object [][] data = new LibroDAO().listaAMatriz(new LibroDAO().obtenerListaLibros());
-		for (int i=0 ; i < listaLibros.size() ;i++){
-			System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
-			}
+		//Object [][] data = new LibroDAO().listaAMatriz(new LibroDAO().obtenerListaLibros());
+		//for (int i=0 ; i < listaLibros.size() ;i++){
+		//	System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4]);
+		//	}
 	}
 	
 

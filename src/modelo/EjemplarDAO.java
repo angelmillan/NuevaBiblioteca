@@ -119,6 +119,7 @@ public class EjemplarDAO implements IEjemplarDAO {
 			preparedStatement.setInt(2, ejemplar.getNumero_ejemplar());
 			resultSet = preparedStatement.executeQuery();
 			filas = preparedStatement.getUpdateCount();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			//System.out.println("Problema al comprobar existencia del libro.");
@@ -128,7 +129,31 @@ public class EjemplarDAO implements IEjemplarDAO {
 			return true;
 		return false;
 	}
-
+	
+	public boolean ejemplarprestado(Ejemplar ejemplar) {
+		boolean prestado = false;
+		// Select * from prestamos where ISBN_PRESTAMO = '650797490-0' AND NUMERO_EJEMPLAR_PRESTAMO = 3 AND FECHA_PRESTAMO  is not "" AND FECHA_DEVOLUCION is NULL;
+		sql = "Select * from prestamos where isbn_prestamo = ? AND numero_ejemplar_prestamo = ? AND fecha_prestamo is not null AND fecha_devolucion IS null;";
+			
+		Connection conexion = Conexion.getInstance();
+		
+			try {
+				preparedStatement = conexion.prepareStatement(sql);
+				preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
+				preparedStatement.setInt(2, ejemplar.getNumero_ejemplar());
+				resultSet = preparedStatement.executeQuery();
+				filas = preparedStatement.getUpdateCount();
+				if (filas != -1)
+					prestado = true;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar ejemplarprestado()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		return prestado;
+	}
+	
+	
+	
 	@Override
 	public boolean actualizarEjemplar(Ejemplar ejemplar) {
 		// TODO Auto-generated method stub
@@ -137,7 +162,6 @@ public class EjemplarDAO implements IEjemplarDAO {
 
 	@Override
 	public boolean crearEjemplar(Ejemplar ejemplar) {
-		
 		filas=0;
 		sql = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
 		Connection conexion = Conexion.getInstance();
@@ -150,6 +174,7 @@ public class EjemplarDAO implements IEjemplarDAO {
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Problema crear el Ejemplar", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
+	
 		if(filas!=0)
 			return true;
 		return false;
@@ -157,7 +182,8 @@ public class EjemplarDAO implements IEjemplarDAO {
 	
 	@Override
 	public boolean borrarEjemplar(Ejemplar ejemplar) {
-		filas = 0;
+		boolean retorno = false;
+		filas=0;
 		// TODO Auto-generated method stub
 		
 		sql = "DELETE FROM ejemplares WHERE isbn_ejemplar=? AND numero_ejemplar=?;";
@@ -168,33 +194,19 @@ public class EjemplarDAO implements IEjemplarDAO {
 			preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
 			preparedStatement.setInt(2, ejemplar.getNumero_ejemplar());
 			filas = preparedStatement.executeUpdate();
-
+			if (filas != 0)
+				retorno = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null, "Problema borrar el libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 
 		}
 		
-		
-		//***********************************************************************
-		/*
-		sql = "SELECT COUNT(isbn_ejemplar), MAX(numero_ejemplar) FROM ejemplares WHERE isbn_ejemplar = ?";
-			try {
-				preparedStatement = conexion.prepareStatement(sql);
-				preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
-				resultSet = preparedStatement.executeQuery();
-				
-				filas = preparedStatement.getUpdateCount();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		*/	
-		//*************************************************************************
-		if(filas!=0)
-			return true;
-		return false;
+		return retorno;
 	}
+	
+	
+	
 	public static Object [][] listaAMatriz (List<Ejemplar> lista){
 		Object [][] matriz = new Object [lista.size()][6];
 			
@@ -212,12 +224,13 @@ public class EjemplarDAO implements IEjemplarDAO {
 	
 
 	
-	public static void main(String[] args) {
+	//public static void main(String[] args) {
 		//System.out.println(new EjemplarDAO().obtenerListaEjemplares());
 		//Ejemplar ejo = new Ejemplar("650797490-1",1);
 		//System.out.println(new EjemplarDAO().obtenerListadeEjemplaresDelMismoLibro(new Ejemplar("078849629-8",1)));
 		
-		//Ejemplar ej = new Ejemplar("890401890-0",14);
+		//Ejemplar ej = new Ejemplar("890401890-0",1);
+		//System.out.println(new EjemplarDAO().ejemplarprestado(ej));
 		//System.out.println(new EjemplarDAO().actualizarEjemplar(ej));
 		//System.out.println(new EjemplarDAO().crearEjemplar(ej));
 		//System.out.println(new EjemplarDAO().existeEjemplar(ej));
@@ -226,15 +239,13 @@ public class EjemplarDAO implements IEjemplarDAO {
 		//System.out.println(new EjemplarDAO().existeEjemplar(us));
 		
 		//System.out.println(ej);
-		List <Ejemplar> lista = new EjemplarDAO().obtenerListaEjemplares();
-		new EjemplarDAO();
-		Object [][] data = EjemplarDAO.listaAMatriz(lista);
-		for (int i=0 ; i < lista.size() ;i++){
-			System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4] + "," + data[i][5]);
-		}
-		
-		
-	}
+		//List <Ejemplar> lista = new EjemplarDAO().obtenerListaEjemplares();
+		//new EjemplarDAO();
+		//Object [][] data = EjemplarDAO.listaAMatriz(lista);
+		//for (int i=0 ; i < lista.size() ;i++){
+		//	System.out.println("" + data[i][0] + "," + data[i][1] + "," + data[i][2] + "," + data[i][3] + "," + data[i][4] + "," + data[i][5]);
+		//}	
+	//}
 
 
 }
