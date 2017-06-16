@@ -1,0 +1,14 @@
+UPDATE prestamos SET fecha_devolucion = strftime('%d-%m-%Y',(SUBSTR(datetime(CURRENT_TIMESTAMP,'localtime'),1,10))) WHERE FECHA_PRESTAMO = '16-06-2017' AND DNI_PRESTAMO = '44558874N' AND  ISBN_PRESTAMO = '650797490-0' AND NUMERO_EJEMPLAR_PRESTAMO = 3;
+15-06-2017||44558874N|650797490-0|3
+
+
+
+CREATE VIEW Prestamo AS
+SELECT usuarios.DNI, usuarios.NOMBRE, usuarios.APELLIDOS,  libros.ISBN, libros.TITULO, libros.AUTOR,  ejemplares.NUMERO_ejemplar  'Ejemplar', prestamos.FECHA_PRESTAMO 'Prestamo', prestamos.FECHA_DEVOLUCION 'Devolucion'
+FROM usuarios, ejemplares, libros, prestamos
+WHERE prestamos.DNI_PRESTAMO = usuarios.DNI  AND prestamos.NUMERO_EJEMPLAR_PRESTAMO = ejemplares.NUMERO_ejemplar AND prestamos.ISBN_PRESTAMO = libros.ISBN AND prestamos.ISBN_PRESTAMO = ejemplares.ISBN_ejemplar;
+
+
+select * from prestamo where devolucion IS NULL;
+
+select * from prestamo where devolucion IS NOT NULL;

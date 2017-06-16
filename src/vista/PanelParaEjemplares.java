@@ -53,6 +53,7 @@ public class PanelParaEjemplares extends JPanel {
 		buttonBorrarEjemplar.setBounds(new Rectangle(25, 25, 0, 0));
 		
 		buttonBuscarEjemplar = new JButton("Buscar Ejemplar");
+		buttonBuscarEjemplar.setVisible(false);
 		buttonBuscarEjemplar.setBounds(new Rectangle(25, 25, 0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();

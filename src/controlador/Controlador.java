@@ -24,6 +24,7 @@ import vista.Vista;
  * @version 1.0
  */
 public class Controlador implements ActionListener {
+	private boolean nuevolibro = false;
 	private Vista vista;
 	private EjemplarDAO ejemplarDAO;
 	private LibroDAO libroDAO;
@@ -97,7 +98,8 @@ public class Controlador implements ActionListener {
 		case ("Añadir nuevo ejemplar"):
 		
 			if (vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow() >= 0) {
-				Object isbn = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow(), 0);
+				int fila = vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow();
+				Object isbn = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 0);
 				ejemplarDAO.crearEjemplar(new Ejemplar(isbn.toString(), 1));	
 				vista.getPanelEjemplares().getTextField_Mensajes().setForeground(Color.GREEN.darker());
 				vista.getPanelEjemplares().getTextField_Mensajes().setText("Ejemplar añadido correctamente");
@@ -113,16 +115,10 @@ public class Controlador implements ActionListener {
 		case ("Borrar Ejemplar"):
 				
 			if (vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow() >= 0) {
-				
 				Object isbn = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow(), 0);
 				Object numero_ejemplar = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow(), 1);
 				Ejemplar aBorrar = new Ejemplar(isbn.toString(), (int) numero_ejemplar);
-				System.out.println("Antes del if ejemplar prestado" + aBorrar);
-				System.out.println(ejemplarDAO.ejemplarprestado(aBorrar));
-				
 					if (ejemplarDAO.ejemplarprestado(aBorrar)){
-						System.out.println(ejemplarDAO.ejemplarprestado(aBorrar));
-						System.out.println("buen camino");
 						ejemplarDAO.borrarEjemplar(aBorrar);
 						vista.getPanelEjemplares().getTextField_Mensajes().setForeground(Color.GREEN.darker());
 						vista.getPanelEjemplares().getTextField_Mensajes().setText("Ejemplar borrado correctamente");
@@ -139,17 +135,15 @@ public class Controlador implements ActionListener {
 				vista.getPanelEjemplares().getTextField_Mensajes().setForeground(Color.RED.brighter());
 				vista.getPanelEjemplares().getTextField_Mensajes().setText("No hay ejemplar seleccionado para eliminar");
 			}
-			
 			break;
 			
 			
 		// Botones del Panel Libros
 			
 		case ("Añadir nuevo Libro"):
-			System.out.println("boton Añadir nuevo Libro");
+			nuevolibro = true;
 			limpiaCamposLibros();
 			hacerEditablesTextFieldsPaneldeLibros();
-			//logica
 			refrescarTablaLibros();
 			
 			break;
@@ -183,21 +177,29 @@ public class Controlador implements ActionListener {
 			break;
 		
 		case ("Modificar Libro"):
-			System.out.println("boton Modificar Libro");
+			
+			
 			hacerEditablesTextFieldsPaneldeLibros();
 			vista.getPanelLibros().getTextISBN().setEditable(false);
 			break;
 		
 		case ("Añadir nuevo ejemplar de libro"):
-			System.out.println("boton Añadir nuevo ejemplar de libro");
+			
 			if (vista.getPanelLibros().getTablaLibros().getSelectedRow() >= 0) {
+				
 				int fila = vista.getPanelLibros().getTablaLibros().getSelectedRow();
 				Object isbn = vista.getPanelLibros().getTablaLibros().getValueAt(fila, 0);
 				ejemplarDAO.crearEjemplar(new Ejemplar(isbn.toString(), 1));	
-				vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
-				vista.getPanelLibros().getTextMensajes().setText("Ejemplar añadido correctamente");
-				limpiaCamposEjemplares();
-				refrescarTablaEjemplares();			
+				if (!ejemplarDAO.isProblemaSQLejemplarDAO()) {
+					vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
+					vista.getPanelLibros().getTextMensajes().setText("Ejemplar añadido correctamente");	
+				} else {
+					vista.getPanelLibros().getTextMensajes().setForeground(Color.red.darker());
+					vista.getPanelLibros().getTextMensajes().setText("Ejemplar no ha sido añadido correctamente");
+				}
+				limpiaCamposLibros();
+				refrescarTablaEjemplares();
+				refrescarTablaLibros();
 			} else {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("No hay ejemplar seleccionado para añadir");
@@ -211,12 +213,10 @@ public class Controlador implements ActionListener {
 			Object autor = vista.getPanelLibros().getTextAutor().getText().trim();
 			Object editorial = vista.getPanelLibros().getTextEditorial().getText().trim();
 			Object edicion = vista.getPanelLibros().getTextEdicion().getText().toString();
-			//int edicion = (int) vista.getPanelLibros().getTextEdicion().getText();
-			//int edicion = Integer.parseInt(vista.getPanelLibros().getTextEdicion().getText());
 			
 			//Comprueba formato del ISBN con REGEXP
 			if (!comprobarISBN(isbn.toString())) {
-				System.out.println(!comprobarISBN(isbn.toString()));
+				
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("El ISBN no es correcto formato debe ser xxxxxxxxx-x regexp (^\\d{9}[-][\\d|X]$)");
 				vista.getPanelLibros().getTextISBN().setText("");
@@ -224,8 +224,7 @@ public class Controlador implements ActionListener {
 			}
 				
 			// comprueba si existe el ISBN en la BD	
-			if (libroDAO.existeLibro(new Libro(isbn.toString()))) {
-				System.out.println(libroDAO.existeLibro(new Libro(isbn.toString())));
+			if (libroDAO.existeLibro(new Libro(isbn.toString())) && nuevolibro) {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("El ISBN del libro ya exite, no pueden estar duplicados");
 				vista.getPanelLibros().getTextISBN().setText("");
@@ -238,14 +237,22 @@ public class Controlador implements ActionListener {
 				vista.getPanelLibros().getTextMensajes().setText("ISBN correcto pero el Título del Libro no puede está vacio");
 				break;
 			}
-			// Guarda el libro en la BD
-			
-			System.out.println(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString())));
-			libroDAO.crearLibro(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString())));
-			System.out.println(libroDAO.crearLibro(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString()))));
-			vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
-			vista.getPanelLibros().getTextMensajes().setText("Libro agregado correctamente a la base de datos");
-			// Desactiva los JTextField y botones del Panel Libros
+			// Guarda o actualiza el libro en la BD
+			if (nuevolibro) {
+				libroDAO.crearLibro(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString())));
+				nuevolibro = false;
+			} else {
+				libroDAO.actualizarLibro(new Libro(isbn.toString(), titulo.toString(), autor.toString(), editorial.toString(), Integer.parseInt(edicion.toString())));	
+			}
+			// comprueba que no ha vulnera las reglas de la bd
+			if (!libroDAO.isProblemaSQLLibroDAO()) { 
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
+				vista.getPanelLibros().getTextMensajes().setText("Libro guardado correctamente a la base de datos");
+			} else {
+				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.darker());
+				vista.getPanelLibros().getTextMensajes().setText("Problema al acceder a la base de datos");	
+			}
+				
 			volverOcultosTextFieldsPaneldeLibros();
 			refrescarTablaLibros();
 			break;

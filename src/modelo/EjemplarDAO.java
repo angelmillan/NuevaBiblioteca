@@ -14,7 +14,8 @@ public class EjemplarDAO implements IEjemplarDAO {
 	private boolean problemaSQLejemplarDAO = false;
 	List<Ejemplar> listaEjemplares = new ArrayList<Ejemplar>();
 	List<Ejemplar> listaEjemplaresDeUnLibro = new ArrayList<Ejemplar>();
-	String sql;
+	String sql="";
+	String sql2="";
 	PreparedStatement preparedStatement;
 	Statement statement;
 	ResultSet resultSet;
@@ -122,7 +123,9 @@ public class EjemplarDAO implements IEjemplarDAO {
 			preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
 			preparedStatement.setInt(2, ejemplar.getNumero_ejemplar());
 			resultSet = preparedStatement.executeQuery();
-			filas = preparedStatement.getUpdateCount();
+			while (resultSet.next()){
+				filas++;
+			}
 			
 		} catch (SQLException e) {
 			problemaSQLejemplarDAO = true;
@@ -157,14 +160,21 @@ public class EjemplarDAO implements IEjemplarDAO {
 
 	@Override
 	public boolean crearEjemplar(Ejemplar ejemplar) {
+		sql2 = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,1);";	
 		problemaSQLejemplarDAO = false;
 		filas=0;
-		sql = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
+		if (existeEjemplar(ejemplar)) {
+			sql2 = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
+		}
 		Connection conexion = Conexion.getInstance();	
 		try {
-			preparedStatement = conexion.prepareStatement(sql);
+			preparedStatement = conexion.prepareStatement(sql2);
+			if (sql2 == "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));"){
 			preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
 			preparedStatement.setString(2, ejemplar.getIsbnEjemplar());
+			} else {
+				preparedStatement.setString(1, ejemplar.getIsbnEjemplar());	
+			}
 			filas = preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			problemaSQLejemplarDAO = true;

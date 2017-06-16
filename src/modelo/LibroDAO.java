@@ -107,7 +107,6 @@ public class LibroDAO implements ILibroDAO {
 	public boolean crearLibro (Libro libro) {
 		problemaSQLLibroDAO = false;
 		filas=0;
-		problemaSQLLibroDAO = false;
 		sql = "INSERT INTO libros(isbn, titulo, autor, editorial, edicion) values(?,?,?,?,?);";
 		Connection conexion = Conexion.getInstance();
 	
@@ -122,7 +121,7 @@ public class LibroDAO implements ILibroDAO {
 			System.out.println(libro);
 		} catch (SQLException e) {
 			problemaSQLLibroDAO = true;
-			JOptionPane.showMessageDialog(null, "El libro ya existe", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Problema al insertar datos en crearLibro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 			
 		}
 		if(filas!=0)
