@@ -219,7 +219,7 @@ public class EjemplarDAO implements IEjemplarDAO {
 			matriz[i][5] = lista.get(i).getEdicion();
 			}		
 		return matriz;	
-		}
+	}
 
 	/**
 	 * @return the problemaSQLejemplarDAO

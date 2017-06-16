@@ -11,6 +11,7 @@ import modelo.Ejemplar;
 import modelo.EjemplarDAO;
 import modelo.Libro;
 import modelo.LibroDAO;
+import modelo.Usuario;
 import modelo.UsuarioDAO;
 import vista.Vista;
 
@@ -25,6 +26,8 @@ import vista.Vista;
  */
 public class Controlador implements ActionListener {
 	private boolean nuevolibro = false;
+	private boolean nuevousuario = false;
+	Matcher mat = null;
 	private Vista vista;
 	private EjemplarDAO ejemplarDAO;
 	private LibroDAO libroDAO;
@@ -55,43 +58,114 @@ public class Controlador implements ActionListener {
 	public void actionPerformed(ActionEvent e){
 		switch (e.getActionCommand()) {
 		
-		// botones del menu principal de la aplicacion
+		// boton de vuelta al menu principal de la aplicacion
+		case ("Menú"):
+			vista.getPanelAplicacion().setVisible(true);
+			vista.getPanelUsuarios().setVisible(false);
+		    vista.getPanelEjemplares().setVisible(false);
+		    vista.getPanelLibros().setVisible(false);
+		    vista.getPanelprestados().setVisible(false);
+		    vista.getPanelPrestar().setVisible(false);
+			break;
 		
+		
+		// botones del menu principal de la aplicacion
 		case ("Gestionar Usuarios"): 
+			vista.getPanelAplicacion().setVisible(false);
 			vista.getPanelUsuarios().setVisible(true);
 		    vista.getPanelEjemplares().setVisible(false);
 		    vista.getPanelLibros().setVisible(false);
-		    //vista.getPanelPrestamos().setVisible(false);
+		    vista.getPanelprestados().setVisible(false);
+		    vista.getPanelPrestar().setVisible(false);
 			break;
 			
 		case ("Gestionar Libros"):
+			vista.getPanelAplicacion().setVisible(false);
 			vista.getPanelUsuarios().setVisible(false);
 	    		vista.getPanelEjemplares().setVisible(false);
 	    		vista.getPanelLibros().setVisible(true);
-	    		//vista.getPanelPrestamos().setVisible(false);
+	    		vista.getPanelprestados().setVisible(false);
+	    		vista.getPanelPrestar().setVisible(false);
 			break;
 			
 		case ("Gestionar Ejemplares"):
+			vista.getPanelAplicacion().setVisible(false);
 			vista.getPanelUsuarios().setVisible(false);
 			vista.getPanelEjemplares().setVisible(true);	    		
 	    		vista.getPanelLibros().setVisible(false);
-	    		//vista.getPanelPrestamos().setVisible(false);
+	    		vista.getPanelprestados().setVisible(false);
+	    		vista.getPanelPrestar().setVisible(false);
 			break;
 			
 		case ("Gestionar Préstamos"):
-			//vista.getPanelUsuarios().setVisible(false);
-	    		//vista.getPanelEjemplares().setVisible(false);
-	    		//vista.getPanelLibros().setVisible(false);
-	    		//vista.getPanelPrestamos().setVisible(true);
+			vista.getPanelAplicacion().setVisible(false);
+			vista.getPanelUsuarios().setVisible(false);
+	    		vista.getPanelEjemplares().setVisible(false);
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelprestados().setVisible(true);
+	    		vista.getPanelPrestar().setVisible(false);
+			break;
+			
+		case ("Acerca de Biblioteca"):
+			vista.getPanelAplicacion().setVisible(true);
+			vista.getPanelUsuarios().setVisible(false);
+			vista.getPanelEjemplares().setVisible(false);	    		
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelprestados().setVisible(false);
+	    		vista.getPanelPrestar().setVisible(false);
 			break;
 			
 		case ("Salir"):
 			
-			//vista.getPanelUsuarios().setVisible(false);
-	    		//vista.getPanelEjemplares().setVisible(true);
-	    		//vista.getPanelLibros().setVisible(false);
-	    		//vista.getPanelPrestamos().setVisible(false);
+			System.exit(0);
 			break;
+		
+		// Botones Panel Aplicación
+		
+		case ("Gestión Usuarios"):
+			vista.getPanelAplicacion().setVisible(false);
+			vista.getPanelUsuarios().setVisible(true);
+		    vista.getPanelEjemplares().setVisible(false);
+		    vista.getPanelLibros().setVisible(false);
+		    vista.getPanelprestados().setVisible(false);
+		    vista.getPanelPrestar().setVisible(false);
+			break;
+			
+		case ("Gestión Libros"):
+			vista.getPanelAplicacion().setVisible(false);
+			vista.getPanelUsuarios().setVisible(false);
+	    		vista.getPanelEjemplares().setVisible(false);
+	    		vista.getPanelLibros().setVisible(true);
+	    		vista.getPanelprestados().setVisible(false);
+	    		vista.getPanelPrestar().setVisible(false);
+	    		break;
+			
+		case ("Gestión Ejemplares"):
+			vista.getPanelAplicacion().setVisible(false);
+			vista.getPanelUsuarios().setVisible(false);
+			vista.getPanelEjemplares().setVisible(true);	    		
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelprestados().setVisible(false);
+	    		vista.getPanelPrestar().setVisible(false);
+			break;	
+			
+		case ("Gestión Préstamos"):
+			vista.getPanelAplicacion().setVisible(false);
+			vista.getPanelUsuarios().setVisible(false);
+			vista.getPanelEjemplares().setVisible(false);	    		
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelprestados().setVisible(true);
+	    		vista.getPanelPrestar().setVisible(false);
+			break;
+			
+		case ("Prestar Ejemplares"):
+			vista.getPanelAplicacion().setVisible(false);
+			vista.getPanelUsuarios().setVisible(false);
+			vista.getPanelEjemplares().setVisible(false);	    		
+	    		vista.getPanelLibros().setVisible(false);
+	    		vista.getPanelprestados().setVisible(false);
+	    		vista.getPanelPrestar().setVisible(true);
+			break;	
 		
 		// Botones del Panel Ejemplares
 		
@@ -177,8 +251,6 @@ public class Controlador implements ActionListener {
 			break;
 		
 		case ("Modificar Libro"):
-			
-			
 			hacerEditablesTextFieldsPaneldeLibros();
 			vista.getPanelLibros().getTextISBN().setEditable(false);
 			break;
@@ -206,31 +278,26 @@ public class Controlador implements ActionListener {
 			}
 			break;
 			
-		case("Guardar Libro"):
-			
+		case("Guardar Libro"):			
 			Object isbn = vista.getPanelLibros().getTextISBN().getText().trim();
 			Object titulo = vista.getPanelLibros().getTextTitulo().getText().trim();
 			Object autor = vista.getPanelLibros().getTextAutor().getText().trim();
 			Object editorial = vista.getPanelLibros().getTextEditorial().getText().trim();
-			Object edicion = vista.getPanelLibros().getTextEdicion().getText().toString();
-			
+			Object edicion = vista.getPanelLibros().getTextEdicion().getText().toString();			
 			//Comprueba formato del ISBN con REGEXP
-			if (!comprobarISBN(isbn.toString())) {
-				
+			if (!comprobarISBN(isbn.toString())) {				
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("El ISBN no es correcto formato debe ser xxxxxxxxx-x regexp (^\\d{9}[-][\\d|X]$)");
 				vista.getPanelLibros().getTextISBN().setText("");
 				break;
-			}
-				
+			}				
 			// comprueba si existe el ISBN en la BD	
 			if (libroDAO.existeLibro(new Libro(isbn.toString())) && nuevolibro) {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("El ISBN del libro ya exite, no pueden estar duplicados");
 				vista.getPanelLibros().getTextISBN().setText("");
 				break;
-			}
-			
+			}			
 			// comprueba que el titulo no está vacio
 			if (titulo.toString().length() == 0) {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
@@ -251,8 +318,7 @@ public class Controlador implements ActionListener {
 			} else {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.darker());
 				vista.getPanelLibros().getTextMensajes().setText("Problema al acceder a la base de datos");	
-			}
-				
+			}			
 			volverOcultosTextFieldsPaneldeLibros();
 			refrescarTablaLibros();
 			break;
@@ -266,7 +332,11 @@ public class Controlador implements ActionListener {
 		// Botones del Panel Usuarios
 
 		case("Añadir nuevo Usuario"):
-			System.out.println("boton Añadir nuevo ejemplar de libro");
+			nuevousuario = true;
+		 	mat = null;
+			limpiaCamposUsuarios();
+			hacerEditablesTextFieldsPaneldeUsuarios();
+			refrescarTablaUsuarios();
 			break;
 		
 		case("Borrar Usuario"):
@@ -275,9 +345,67 @@ public class Controlador implements ActionListener {
 		
 		case("Modificar Usuario"):
 			System.out.println("boton Modificar Usuario");
+			hacerEditablesTextFieldsPaneldeUsuarios();
+			vista.getPanelUsuarios().getTextDNI().setEditable(false);
 			break;
+			
+		case("Guardar Usuario"):
+			Object dni = vista.getPanelUsuarios().getTextDNI().getText().trim();
+			Object nombre = vista.getPanelUsuarios().getTextNombre().getText().trim();
+			Object apellidos = vista.getPanelUsuarios().getTextApellidos().getText().trim();
+			Object direccion = vista.getPanelUsuarios().getTextDireccion().getText().trim();
+			
+		//Comprueba formato del DNI con REGEXP
+		if (!comprobarDNIoNIE(dni.toString())) {
+			
+			vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.brighter());
+			vista.getPanelUsuarios().getTextMensaje().setText("El DNI no es correcto formato debe ser #########-A regexp (^\\d{8}[A-Z]$)");
+			vista.getPanelUsuarios().getTextDNI().setText("");
+			//comprobarDNIoNIE(cadena)
+			break;
+		}
+			
+		// comprueba si existe el DNI en la BD	
+		if (usuarioDAO.existeUsuario(new Usuario(dni.toString(),nombre.toString(),apellidos.toString(),direccion.toString())) && nuevousuario) {
+			vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.brighter());
+			vista.getPanelUsuarios().getTextMensaje().setText("El DNI del usuario ya exite, no pueden estar duplicados");
+			vista.getPanelUsuarios().getTextDNI().setText("");
+			break;
+		}
 		
+		// comprueba que el nombre y apellidos del usuario no está vacio
+		if (nombre.toString().length() == 0 && apellidos.toString().length() == 0) {
+			vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.brighter());
+			vista.getPanelUsuarios().getTextMensaje().setText("DNI correcto pero el Nombre y Apellido del usuario no puede está vacio");	
+			break;
+		}
+		// Guarda o actualiza el libro en la BD
+					if (nuevousuario) {
+						usuarioDAO.crearUsuario(new Usuario(dni.toString(),nombre.toString(),apellidos.toString(),direccion.toString()));
+						nuevousuario = false;
+					} else {
+						usuarioDAO.actualizarUsuario(new Usuario(dni.toString(),nombre.toString(),apellidos.toString(),direccion.toString()));	
+					}
+					// comprueba que no ha vulnera las reglas de la bd
+					if (!usuarioDAO.isProblemaSQLusuarioDAO()) { 
+						vista.getPanelUsuarios().getTextMensaje().setForeground(Color.GREEN.darker());
+						vista.getPanelUsuarios().getTextMensaje().setText("Usuario guardado correctamente a la base de datos");
+					} else {
+						vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.darker());
+						vista.getPanelUsuarios().getTextMensaje().setText("Problema al acceder a la base de datos");	
+					}			
+					volverOcultosTextFieldsPaneldeUsuarios();
+					refrescarTablaUsuarios();
+		break;
+		
+		case("Cancelar Usuario"):
+			volverOcultosTextFieldsPaneldeUsuarios();
+			refrescarTablaUsuarios();
+			break;
+			
 		default:
+			
+			
 			break;
 		}
 
@@ -292,6 +420,7 @@ public class Controlador implements ActionListener {
 	 */
 	private void actionListener(ActionListener escuchador) {
 		// Listeners de botones del Menu general
+		vista.getMntmAcercaDeBiblioteca().addActionListener(escuchador);
 		vista.getMntmSalir().addActionListener(escuchador);
 		vista.getMntmGestionarEjemplares().addActionListener(escuchador);
 		vista.getMntmGestionarLibros().addActionListener(escuchador);
@@ -300,6 +429,7 @@ public class Controlador implements ActionListener {
 		vista.getPanelEjemplares().getButtonAddEjemplar().addActionListener(escuchador);
 		vista.getPanelEjemplares().getButtonBorrarEjemplar().addActionListener(escuchador);
 		vista.getPanelEjemplares().getButtonBuscarEjemplar().addActionListener(escuchador);
+		vista.getPanelEjemplares().getBtnMenu().addActionListener(escuchador);
 		// Listeners de botones del panel Libros
 		vista.getPanelLibros().getBtnAadirNuevoEjemplar().addActionListener(escuchador);
 		vista.getPanelLibros().getBtnAadirNuevoLibro().addActionListener(escuchador);
@@ -307,10 +437,26 @@ public class Controlador implements ActionListener {
 		vista.getPanelLibros().getBtnModificarLibro().addActionListener(escuchador);
 		vista.getPanelLibros().getBtnGuardarLibro().addActionListener(escuchador);
 		vista.getPanelLibros().getBtnCancelarLibro().addActionListener(escuchador);
+		vista.getPanelLibros().getBtnMenu().addActionListener(escuchador);
 		// Listeners de botones del panel Usuarios
 		vista.getPanelUsuarios().getBtnAddNuevoUsuario().addActionListener(escuchador);
 		vista.getPanelUsuarios().getBtnBorrarUsuario().addActionListener(escuchador);
 		vista.getPanelUsuarios().getBtnModificarUsuario().addActionListener(escuchador);
+		vista.getPanelUsuarios().getBtnMenu().addActionListener(escuchador);
+		vista.getPanelUsuarios().getBtnGuardarUsuario().addActionListener(escuchador);
+		vista.getPanelUsuarios().getBtnCancelarUsuario().addActionListener(escuchador);
+		// Listener de botones de panel Aplicacion
+		vista.getPanelAplicacion().getBtnGestionUsuarios().addActionListener(escuchador);
+		vista.getPanelAplicacion().getBtnGestionLibros().addActionListener(escuchador);
+		vista.getPanelAplicacion().getBtnGestionEjemplares().addActionListener(escuchador);
+		vista.getPanelAplicacion().getBtnGestionPrestamos().addActionListener(escuchador);
+		vista.getPanelAplicacion().getBtnPrestarEjemplares().addActionListener(escuchador);
+		//Listener de botones de panel gestion prestamos
+		vista.getPanelprestados().getBtnDevolverEjemplar().addActionListener(escuchador);
+		vista.getPanelprestados().getBtnMenu().addActionListener(escuchador);
+		//Listener de botones de panel prestar ejemplares
+		vista.getPanelPrestar().getBtnPrestar().addActionListener(escuchador);
+		vista.getPanelPrestar().getBtnMenu().addActionListener(escuchador);
 		
 		// Listener ListSelectionEvent para JTable del Panel Ejemplares Obtiene datos de la fila del JTable seleccionado 
 		//Los introduce en el JTextField correspondiente mediante accionEventoTablaEjemplares();	
@@ -329,7 +475,24 @@ public class Controlador implements ActionListener {
 		// Los introduce en el JTextField correspondiente ListSelectionEvent
 		vista.getPanelUsuarios().getTableUsuarios().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
 			accionEventoTablaEsuarios();	
-		});	
+		});
+		
+		vista.getPanelprestados().getTableDevueltos().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+			//accionEventoTablaDevueltos();	
+		});
+		vista.getPanelprestados().getTablePrestados().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+			//accionEventoTablaPrestados();	
+		});
+		vista.getPanelPrestar().getTableUsuarioPrestar().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+			//accionEventoTablaPrestados();	
+		});
+		vista.getPanelPrestar().getTableLibrosPrestar().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+			//accionEventoTablaPrestados();	
+		});
+		vista.getPanelPrestar().getTableEjemplaresPrestar().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+			//accionEventoTablaPrestados();	
+		});
+		
 	}
 	
 	/**
@@ -418,6 +581,7 @@ public class Controlador implements ActionListener {
 		vista.getPanelLibros().getBtnBorrarLibro().setEnabled(false);
 		vista.getPanelLibros().getBtnModificarLibro().setEnabled(false);
 		vista.getPanelLibros().getBtnAadirNuevoEjemplar().setEnabled(false);
+		vista.getPanelLibros().getBtnMenu().setEnabled(false);
 		vista.getPanelLibros().getBtnGuardarLibro().setVisible(true);
 		vista.getPanelLibros().getBtnCancelarLibro().setVisible(true);
 		
@@ -442,18 +606,56 @@ public class Controlador implements ActionListener {
 		vista.getPanelLibros().getBtnBorrarLibro().setEnabled(true);
 		vista.getPanelLibros().getBtnModificarLibro().setEnabled(true);
 		vista.getPanelLibros().getBtnAadirNuevoEjemplar().setEnabled(true);
+		vista.getPanelLibros().getBtnMenu().setEnabled(true);
 		vista.getPanelLibros().getBtnGuardarLibro().setVisible(false);
-		vista.getPanelLibros().getBtnCancelarLibro().setVisible(false);
+		vista.getPanelLibros().getBtnCancelarLibro().setVisible(false);	
+	}
+	
+	public void hacerEditablesTextFieldsPaneldeUsuarios() {
+		
+		vista.getPanelUsuarios().getTextDNI().setEditable(true);
+		vista.getPanelUsuarios().getTextNombre().setEditable(true);
+		vista.getPanelUsuarios().getTextApellidos().setEditable(true);
+		vista.getPanelUsuarios().getTextDireccion().setEditable(true);
+		vista.getPanelUsuarios().getTextDNI().setBackground(Color.white);
+		vista.getPanelUsuarios().getTextNombre().setBackground(Color.white);
+		vista.getPanelUsuarios().getTextApellidos().setBackground(Color.white);
+		vista.getPanelUsuarios().getTextDireccion().setBackground(Color.white);
+		vista.getPanelUsuarios().getBtnAddNuevoUsuario().setEnabled(false);
+		vista.getPanelUsuarios().getBtnBorrarUsuario().setEnabled(false);
+		vista.getPanelUsuarios().getBtnModificarUsuario().setEnabled(false);
+		vista.getPanelUsuarios().getBtnMenu().setEnabled(false);
+		vista.getPanelUsuarios().getBtnGuardarUsuario().setVisible(true);
+		vista.getPanelUsuarios().getBtnCancelarUsuario().setVisible(true);
+	}
+	
+	public void volverOcultosTextFieldsPaneldeUsuarios() {
+		vista.getPanelUsuarios().getTextDNI().setEditable(false);
+		vista.getPanelUsuarios().getTextNombre().setEditable(false);
+		vista.getPanelUsuarios().getTextApellidos().setEditable(false);
+		vista.getPanelUsuarios().getTextDireccion().setEditable(false);
+		vista.getPanelUsuarios().getTextDNI().setBackground(SystemColor.window);
+		vista.getPanelUsuarios().getTextNombre().setBackground(SystemColor.window);
+		vista.getPanelUsuarios().getTextApellidos().setBackground(SystemColor.window);
+		vista.getPanelUsuarios().getTextDireccion().setBackground(SystemColor.window);
+		vista.getPanelUsuarios().getBtnAddNuevoUsuario().setEnabled(true);
+		vista.getPanelUsuarios().getBtnBorrarUsuario().setEnabled(true);
+		vista.getPanelUsuarios().getBtnModificarUsuario().setEnabled(true);
+		vista.getPanelUsuarios().getBtnMenu().setEnabled(true);
+		vista.getPanelUsuarios().getBtnGuardarUsuario().setVisible(false);
+		vista.getPanelUsuarios().getBtnCancelarUsuario().setVisible(false);
 		
 	}
+	
 	/**
 	 * Comprueba que el ISBN tiene el formato correcto
 	 * @param Cadena es un ISBN a comprobar
 	 * @return true si coincide con la expresión regular (^\\d{9}[-][\\d|X]$)
 	 */
 	public boolean comprobarISBN (String cadena) {
+		Matcher mat = null;
 		Pattern patron = Pattern.compile("^\\d{9}[-][\\d|X]$");
-		Matcher mat = patron.matcher(cadena);
+		mat = patron.matcher(cadena);
 		return mat.matches();
 	}
 	/**
@@ -462,8 +664,9 @@ public class Controlador implements ActionListener {
 	 * @return true si la cadena coincide con la expresion regular (^\\d{9}[-][\\d|X]$ (([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1})))
 	 */
 	public boolean comprobarDNIoNIE (String cadena) {
-		Pattern patron = Pattern.compile("^\\d{9}[-][\\d|X]$ (([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))");
-		Matcher mat = patron.matcher(cadena);
+		
+		Pattern patron = Pattern.compile("^\\d{8}[A-Z]$");
+		mat = patron.matcher(cadena);
 		return mat.matches();
 	}
 	

@@ -35,6 +35,7 @@ public class PanelParaLibros extends JPanel {
 	private JButton btnAadirNuevoEjemplar;
 	private JButton btnGuardarLibro;
 	private JButton btnCancelarLibro;
+	private JButton btnMenu;
 
 	//private ModeloTablaLibros tablaLibros;
 
@@ -176,26 +177,31 @@ public class PanelParaLibros extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		btnMenu = new JButton("Menú");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(30, Short.MAX_VALUE)
+					.addContainerGap(8, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnAadirNuevoLibro, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE)
-							.addGap(35)
-							.addComponent(btnBorrarLibro, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
-							.addGap(37)
-							.addComponent(btnModificarLibro, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnAadirNuevoEjemplar))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(6)
-							.addComponent(textMensajes, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE)))
-					.addGap(20))
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+								.addComponent(btnAadirNuevoLibro, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnBorrarLibro, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnModificarLibro, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(btnAadirNuevoEjemplar)
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnMenu))
+							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+								.addGap(6)
+								.addComponent(textMensajes, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(32, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -205,12 +211,12 @@ public class PanelParaLibros extends JPanel {
 					.addGap(12)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnAadirNuevoLibro)
 						.addComponent(btnBorrarLibro)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnModificarLibro)
-							.addComponent(btnAadirNuevoEjemplar)))
+						.addComponent(btnModificarLibro)
+						.addComponent(btnAadirNuevoEjemplar)
+						.addComponent(btnMenu))
 					.addGap(12)
 					.addComponent(textMensajes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
@@ -316,6 +322,13 @@ public class PanelParaLibros extends JPanel {
 	 */
 	public JButton getBtnCancelarLibro() {
 		return btnCancelarLibro;
+	}
+
+	/**
+	 * @return the btnMenu
+	 */
+	public JButton getBtnMenu() {
+		return btnMenu;
 	}
 	
 }

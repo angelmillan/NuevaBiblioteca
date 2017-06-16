@@ -21,6 +21,8 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTable;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class PanelParaEjemplares extends JPanel {
 	/**
@@ -38,6 +40,7 @@ public class PanelParaEjemplares extends JPanel {
 	private JButton buttonBorrarEjemplar;
 	private JButton buttonAddEjemplar;
 	private JTable tabla_Ejemplares;
+	private JButton btnMenu;
 
 	/**
 	 * Create the panel.
@@ -180,12 +183,14 @@ public class PanelParaEjemplares extends JPanel {
 					.addContainerGap(18, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
+		
+		btnMenu = new JButton("Menú");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(27, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -193,15 +198,17 @@ public class PanelParaEjemplares extends JPanel {
 							.addGap(35)
 							.addComponent(buttonBorrarEjemplar, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
 							.addGap(37)
-							.addComponent(buttonBuscarEjemplar, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+							.addComponent(buttonBuscarEjemplar, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(btnMenu))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(6)
 							.addComponent(textField_Mensajes, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE)))
 					.addGap(23))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(14)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
 					.addGap(12)
@@ -210,10 +217,12 @@ public class PanelParaEjemplares extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(buttonAddEjemplar)
 						.addComponent(buttonBorrarEjemplar)
-						.addComponent(buttonBuscarEjemplar))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(buttonBuscarEjemplar)
+							.addComponent(btnMenu)))
 					.addGap(12)
 					.addComponent(textField_Mensajes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(32, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
 		tabla_Ejemplares = new JTable(new ModeloTablaEjemplares());
@@ -222,6 +231,7 @@ public class PanelParaEjemplares extends JPanel {
 		tabla_Ejemplares.setAutoCreateRowSorter(true);
 		tabla_Ejemplares.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabla_Ejemplares.setModel(new controlador.ModeloTablaEjemplares());
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tabla_Ejemplares, textField_ISBN_Ejemplar, textField_NUmero_Ejemplar, textField_Editorial_Ejemplar, textField_Titulo_Ejemplar, textField_Autor_Ejemplar, label_1, buttonAddEjemplar, buttonBorrarEjemplar, buttonBuscarEjemplar, scrollPane, label, textField_Edicion_Ejemplar, label_2, label_3, label_4, panel, label_5, textField_Mensajes}));
 		tabla_Ejemplares.getColumnModel().getColumn(0).setPreferredWidth(24);
 		tabla_Ejemplares.getColumnModel().getColumn(1).setPreferredWidth(4);
 		tabla_Ejemplares.getColumnModel().getColumn(2).setPreferredWidth(125);
@@ -384,6 +394,13 @@ public class PanelParaEjemplares extends JPanel {
 	 */
 	public void setTabla_Ejemplares(JTable tabla_Ejemplares) {
 		this.tabla_Ejemplares = tabla_Ejemplares;
+	}
+
+	/**
+	 * @return the btnMenu
+	 */
+	public JButton getBtnMenu() {
+		return btnMenu;
 	}
 	
 	

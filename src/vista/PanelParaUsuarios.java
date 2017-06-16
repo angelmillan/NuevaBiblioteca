@@ -17,6 +17,8 @@ import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class PanelParaUsuarios extends JPanel {
@@ -29,6 +31,9 @@ public class PanelParaUsuarios extends JPanel {
 	private JButton btnAddNuevoUsuario;
 	private JButton btnBorrarUsuario;
 	private JButton btnModificarUsuario;
+	private JButton btnMenu;
+	private JButton btnGuardarUsuario;
+	private JButton btnCancelarUsuario;
 
 	/**
 	 * Create the panel.
@@ -74,6 +79,16 @@ public class PanelParaUsuarios extends JPanel {
 		textApellidos.setEditable(false);
 		textApellidos.setColumns(10);
 		textApellidos.setBackground(SystemColor.window);
+		
+		btnGuardarUsuario = new JButton("Guardar Usuario");
+		btnGuardarUsuario.setVisible(false);
+		btnGuardarUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		btnCancelarUsuario = new JButton("Cancelar Usuario");
+		btnCancelarUsuario.setVisible(false);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -83,21 +98,26 @@ public class PanelParaUsuarios extends JPanel {
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(lblDireccin)
 							.addGap(18)
-							.addComponent(textDireccion, GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+							.addComponent(textDireccion, GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE)
 							.addGap(212))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblApellidos)
 								.addComponent(lblDni))
 							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel.createSequentialGroup()
-									.addComponent(textDNI, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-									.addGap(18)
+									.addComponent(textDNI, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(lblNombre)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(textNombre, GroupLayout.PREFERRED_SIZE, 541, GroupLayout.PREFERRED_SIZE))
-								.addComponent(textApellidos, GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE))))
+									.addComponent(textNombre, GroupLayout.PREFERRED_SIZE, 395, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textApellidos, GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnGuardarUsuario)
+								.addComponent(btnCancelarUsuario))
+							.addGap(231)))
 					.addGap(17))
 		);
 		gl_panel.setVerticalGroup(
@@ -108,16 +128,18 @@ public class PanelParaUsuarios extends JPanel {
 						.addComponent(lblDni)
 						.addComponent(textNombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textDNI, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNombre))
+						.addComponent(lblNombre)
+						.addComponent(btnGuardarUsuario))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblApellidos)
-						.addComponent(textApellidos, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textApellidos, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnCancelarUsuario))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDireccin)
 						.addComponent(textDireccion, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(24, Short.MAX_VALUE))
+					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 		
@@ -137,12 +159,14 @@ public class PanelParaUsuarios extends JPanel {
 		textMensaje.setColumns(10);
 		textMensaje.setBounds(new Rectangle(25, 25, 0, 0));
 		textMensaje.setBackground(SystemColor.window);
+		
+		btnMenu = new JButton("Menú");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(25)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -150,15 +174,17 @@ public class PanelParaUsuarios extends JPanel {
 							.addGap(35)
 							.addComponent(btnBorrarUsuario, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
 							.addGap(37)
-							.addComponent(btnModificarUsuario, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+							.addComponent(btnModificarUsuario, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(btnMenu))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(6)
 							.addComponent(textMensaje, GroupLayout.PREFERRED_SIZE, 844, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(25, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(11, Short.MAX_VALUE)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
 					.addGap(12)
@@ -167,16 +193,18 @@ public class PanelParaUsuarios extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnAddNuevoUsuario)
 						.addComponent(btnBorrarUsuario)
-						.addComponent(btnModificarUsuario))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnModificarUsuario)
+							.addComponent(btnMenu)))
 					.addGap(12)
 					.addComponent(textMensaje, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
 		
 		tableUsuarios = new JTable(new ModeloTablaUsuarios());
-		scrollPane.setViewportView(tableUsuarios);
 		tableUsuarios.setAutoCreateRowSorter(true);
 		tableUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane.setViewportView(tableUsuarios);
 		
 		setLayout(groupLayout);
 
@@ -243,6 +271,27 @@ public class PanelParaUsuarios extends JPanel {
 	 */
 	public JButton getBtnModificarUsuario() {
 		return btnModificarUsuario;
+	}
+
+	/**
+	 * @return the btnMenu
+	 */
+	public JButton getBtnMenu() {
+		return btnMenu;
+	}
+
+	/**
+	 * @return the btnGuardarUsuario
+	 */
+	public JButton getBtnGuardarUsuario() {
+		return btnGuardarUsuario;
+	}
+
+	/**
+	 * @return the btnCancelarUsuario
+	 */
+	public JButton getBtnCancelarUsuario() {
+		return btnCancelarUsuario;
 	}
 	
 	

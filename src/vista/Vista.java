@@ -38,6 +38,9 @@ public class Vista extends JFrame {
 	private PanelParaEjemplares panelEjemplares;
 	private PanelParaLibros panelLibros;
 	private PanelParaUsuarios panelUsuarios;
+	private PanelAplicacion panelAplicacion;
+	private PanelGestionPrestamos panelprestados;
+	private PanelParaPrestar panelPrestar;
 	
 
 
@@ -71,7 +74,7 @@ public class Vista extends JFrame {
 		
 		
 		panelEjemplares = new PanelParaEjemplares();
-		panelEjemplares.setVisible(true);
+		panelEjemplares.setVisible(false);
 		contentPane.add(panelEjemplares);
 		
 		
@@ -82,6 +85,18 @@ public class Vista extends JFrame {
 		panelUsuarios = new PanelParaUsuarios();
 		panelUsuarios.setVisible(false);
 		contentPane.add(panelUsuarios);
+		
+		panelAplicacion = new PanelAplicacion();
+		panelAplicacion.setVisible(true);
+		contentPane.add(panelAplicacion);
+		
+		panelprestados = new PanelGestionPrestamos();
+		panelprestados.setVisible(false);
+		contentPane.add(panelprestados);
+		
+		panelPrestar = new PanelParaPrestar();
+		panelPrestar.setVisible(false);
+		contentPane.add(panelPrestar);
 		
 		
 	}
@@ -345,6 +360,27 @@ public class Vista extends JFrame {
 	 */
 	public void setPanelUsuarios(PanelParaUsuarios panelUsuarios) {
 		this.panelUsuarios = panelUsuarios;
+	}
+
+	/**
+	 * @return the panelAplicacion
+	 */
+	public PanelAplicacion getPanelAplicacion() {
+		return panelAplicacion;
+	}
+
+	/**
+	 * @return the panelprestados
+	 */
+	public PanelGestionPrestamos getPanelprestados() {
+		return panelprestados;
+	}
+
+	/**
+	 * @return the panelPrestar
+	 */
+	public PanelParaPrestar getPanelPrestar() {
+		return panelPrestar;
 	}
 
 		

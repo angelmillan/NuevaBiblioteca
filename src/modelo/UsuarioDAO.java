@@ -57,14 +57,14 @@ public class UsuarioDAO implements IUsuarioDAO {
 			preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, usuario.getDniUsuario());
 			resultSet = preparedStatement.executeQuery();
-			filas = preparedStatement.getUpdateCount();
-
+			while (resultSet.next()){
+				filas++;
+			}
 		} catch (SQLException e) {
 			problemaSQLusuarioDAO = true;
-			//System.out.println("Problema al comprobar existencia del libro.");
+			//System.out.println("Problema al comprobar existencia del usuario.");
 			JOptionPane.showMessageDialog(null, "Problema al comprobar existencia Usuario existeUsuario()", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
-		}
-		
+		}		
 		if (filas != 0)		
 			return true;
 		return false;
@@ -151,7 +151,10 @@ public class UsuarioDAO implements IUsuarioDAO {
 		try {
 			PreparedStatement preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, usuario.getDniUsuario());
-			filas = preparedStatement.executeUpdate();
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				filas++;
+			}
 
 		} catch (SQLException e) {
 			problemaSQLusuarioDAO = true;
