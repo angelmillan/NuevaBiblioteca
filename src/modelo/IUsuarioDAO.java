@@ -13,7 +13,7 @@ public interface IUsuarioDAO {
 	
 	boolean crearUsuario(Usuario usuario);
 	
-	Usuario obtenerUsuario(Usuario usuario);
+	boolean obtenerUsuarioConPrestamos(Usuario usuario);
 	
 	boolean borrarUsuario(Usuario usuario);
 	

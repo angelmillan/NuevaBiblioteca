@@ -144,14 +144,12 @@ public class PrestamoDAO {
 			return true;	
 		return false;
 	}
-	public boolean prestarEjemplarAUsuario (Prestamo prestamo) {
-		
+	public boolean prestarEjemplarAUsuario (Prestamo prestamo) {		
 			problemaSQLprestadosDAO = false;
 			filas=0;
 			//insert into prestamos (DNI_PRESTAMO,ISBN_PRESTAMO,NUMERO_EJEMPLAR_PRESTAMO) VALUES ('10520880U','078849629-8',2);
 			sql = "INSERT INTO prestamos(dni_prestamo, isbn_prestamo, numero_ejemplar_prestamo) values(?,?,?);";
-			Connection conexion = Conexion.getInstance();
-		
+			Connection conexion = Conexion.getInstance();		
 			try {
 				preparedStatement = conexion.prepareStatement(sql);
 				preparedStatement.setString(1, prestamo.getDni());
@@ -165,8 +163,7 @@ public class PrestamoDAO {
 			}
 			if(filas!=0)
 				return true;
-			return false;
-		
+			return false;		
 	}
 	
 	public static Object [][] listaAMatrizPrestado (List<Prestamo> lista){

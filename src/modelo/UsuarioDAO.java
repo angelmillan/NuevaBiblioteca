@@ -121,25 +121,25 @@ public class UsuarioDAO implements IUsuarioDAO {
 	
 
 	@Override
-	public Usuario obtenerUsuario(Usuario usuario) {
+	public boolean obtenerUsuarioConPrestamos(Usuario usuario) {
 		problemaSQLusuarioDAO = false;
-		Usuario user = null;
-		sql = "SELECT * FROM usuarios WHERE dni=?;";
+		filas=0;
+		sql = "SELECT * FROM prestamos WHERE dni_prestamo=?;";
 		Connection conexion = Conexion.getInstance();
 		try {
 			preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, usuario.getDniUsuario());
 			resultSet = preparedStatement.executeQuery();
-			String dni = resultSet.getString("dni");
-			String nombre = resultSet.getString("nombre");
-			String apellidos = resultSet.getString("apellidos");
-			String direccion = resultSet.getString("direccion");
-			user = new Usuario(dni, nombre, apellidos, direccion);	
+			while (resultSet.next()){
+				filas++;
+			}
 		} catch (SQLException e) {
 			problemaSQLusuarioDAO = true;
-			JOptionPane.showMessageDialog(null, "Problema obtener usuario", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Problema obtener usuario con ejemplares", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
-		return user;
+		if (filas != 0)
+			return true;
+		return false;
 	}
 
 	@Override
@@ -147,8 +147,6 @@ public class UsuarioDAO implements IUsuarioDAO {
 		
 		
 		problemaSQLusuarioDAO = false;
-		System.out.println(usuario);
-		System.out.println(usuario.getDniUsuario());
 		sql = "DELETE FROM usuarios WHERE dni=?;";
 		Connection conexion = Conexion.getInstance();
 		filas = 0;

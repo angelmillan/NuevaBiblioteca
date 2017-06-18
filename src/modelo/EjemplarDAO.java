@@ -138,9 +138,32 @@ public class EjemplarDAO implements IEjemplarDAO {
 		return false;
 	}
 	
+	public boolean hayAlgunEjemplarActivo (Libro libro){
+		problemaSQLejemplarDAO = false;
+		filas = 0;
+		sql = "Select * FROM ejemplares WHERE ISBN_ejemplar=?;";
+		Connection conexion = Conexion.getInstance();
+		try {
+			preparedStatement = conexion.prepareStatement(sql);
+			preparedStatement.setString(1, libro.getIsbnLibro());
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				filas++;
+			}			
+		} catch (SQLException e) {
+			problemaSQLejemplarDAO = true;
+			//System.out.println("Problema al comprobar existencia del libro.");
+			JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar existeEjemplar()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
+		}		
+		if (filas != 0)		
+			return true;
+		return false;
+
+	}
+	
 	public boolean ejemplarprestado(Ejemplar ejemplar) {
 		problemaSQLejemplarDAO = false;
-		boolean prestado = false;
+		filas = 0;
 		// Select * from prestamos where ISBN_PRESTAMO = '650797490-0' AND NUMERO_EJEMPLAR_PRESTAMO = 3 AND FECHA_PRESTAMO  is not "" AND FECHA_DEVOLUCION is NULL;
 		sql = "Select * from prestamos where isbn_prestamo = ? AND numero_ejemplar_prestamo = ? AND fecha_prestamo is not null AND fecha_devolucion IS null;";	
 		Connection conexion = Conexion.getInstance();		
@@ -149,14 +172,16 @@ public class EjemplarDAO implements IEjemplarDAO {
 				preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
 				preparedStatement.setInt(2, ejemplar.getNumero_ejemplar());
 				resultSet = preparedStatement.executeQuery();
-				filas = preparedStatement.getUpdateCount();
-				if (filas != -1)
-					prestado = true;
+				while (resultSet.next()){
+					filas++;
+				}
 			} catch (SQLException e) {
 				problemaSQLejemplarDAO = true;
 				JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar ejemplarprestado()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
 			}			
-		return prestado;
+		if (filas != 0)		
+			return true;
+		return false;
 	}
 
 	@Override
