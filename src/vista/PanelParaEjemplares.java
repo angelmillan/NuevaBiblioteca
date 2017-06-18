@@ -63,7 +63,7 @@ public class PanelParaEjemplares extends JPanel {
 		scrollPane.setBounds(new Rectangle(25, 25, 0, 0));
 		
 		textField_Mensajes = new JTextField();
-		textField_Mensajes.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		textField_Mensajes.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		textField_Mensajes.setBounds(new Rectangle(25, 25, 0, 0));
 		textField_Mensajes.setForeground(Color.RED);
 		textField_Mensajes.setEditable(false);

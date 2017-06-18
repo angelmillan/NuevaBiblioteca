@@ -58,7 +58,7 @@ public class PanelParaLibros extends JPanel {
 		scrollPane.setBounds(new Rectangle(25, 25, 0, 0));
 		
 		textMensajes = new JTextField();
-		textMensajes.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		textMensajes.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		textMensajes.setBounds(new Rectangle(25, 25, 0, 0));
 		textMensajes.setForeground(Color.RED);
 		textMensajes.setEditable(false);

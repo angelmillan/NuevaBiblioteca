@@ -93,7 +93,7 @@ public class LibroDAO implements ILibroDAO {
 
 		} catch (SQLException e) {
 			problemaSQLLibroDAO = true;
-			JOptionPane.showMessageDialog(null, "Problema al actualizar el Libro", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Problema al actualizar el Libro,es posible que la fecha de Edición no sea correcta", "Problema JBDC", JOptionPane.ERROR_MESSAGE);
 			
 		}
 		
@@ -176,8 +176,8 @@ public class LibroDAO implements ILibroDAO {
 	}
 	
 	public boolean libroprestado(Libro libro) {
+		filas = 0;
 		problemaSQLLibroDAO = false;
-		boolean prestado = false;
 		// Select * from prestamos where ISBN_PRESTAMO = '650797490-0' AND FECHA_PRESTAMO  is not "" AND FECHA_DEVOLUCION is NULL;
 		sql = "Select * from prestamos where isbn_prestamo = ?  AND fecha_prestamo is not null AND fecha_devolucion IS null;";
 			
@@ -190,14 +190,13 @@ public class LibroDAO implements ILibroDAO {
 				while (resultSet.next()){
 					filas++;
 				}
-				if (filas != 0)
-					prestado = true;
 			} catch (SQLException e) {
 				problemaSQLLibroDAO = true;
 				JOptionPane.showMessageDialog(null, "Problema al comprobar existencia de Ejemplar ejemplarprestado()", "Problema SQL", JOptionPane.ERROR_MESSAGE);
 			}
-			
-		return prestado;
+			if (filas != 0)
+				return true;	
+		return false;
 	}
 
 	public static Object [][] listaAMatriz (List<Libro> list){

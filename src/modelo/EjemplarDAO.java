@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 public class EjemplarDAO implements IEjemplarDAO {
 	private boolean problemaSQLejemplarDAO = false;
+	
 	List<Ejemplar> listaEjemplares = new ArrayList<Ejemplar>();
 	List<Ejemplar> listaEjemplaresDeUnLibro = new ArrayList<Ejemplar>();
 	String sql="";
@@ -65,7 +66,7 @@ public class EjemplarDAO implements IEjemplarDAO {
 			preparedStatement.setString(1, ejemplar.getIsbnEjemplar());
 			preparedStatement.setString(2, ejemplar.getIsbnEjemplar());			
 			resultSet = preparedStatement.executeQuery();
-			System.out.println(resultSet);
+			
 			while(resultSet.next()){
 				String isbn = resultSet.getString("ISBN_ejemplar");
 				int numero = resultSet.getInt("NUMERO_ejemplar");
@@ -163,9 +164,10 @@ public class EjemplarDAO implements IEjemplarDAO {
 		sql2 = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,1);";	
 		problemaSQLejemplarDAO = false;
 		filas=0;
-		if (existeEjemplar(ejemplar)) {
-			sql2 = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
-		}
+		
+			if (existeEjemplar(ejemplar)) {
+				sql2 = "INSERT INTO ejemplares(ISBN_ejemplar, Numero_ejemplar) values(?,(SELECT Max(Numero_ejemplar) +1 FROM EJEMPLARES WHERE ISBN_Ejemplar = ?));";
+			}
 		Connection conexion = Conexion.getInstance();	
 		try {
 			preparedStatement = conexion.prepareStatement(sql2);
@@ -206,6 +208,8 @@ public class EjemplarDAO implements IEjemplarDAO {
 		return false;
 	}
 	
+
+	
 	
 	
 	public static Object [][] listaAMatriz (List<Ejemplar> lista){
@@ -221,6 +225,15 @@ public class EjemplarDAO implements IEjemplarDAO {
 		return matriz;	
 	}
 
+	public static Object [][] listaAMatrizPrestar (List<Ejemplar> lista){
+		Object [][] matriz = new Object [lista.size()][3];			
+			for (int i=0 ; i < lista.size() ;i++) {
+			matriz[i][0] = lista.get(i).getIsbnEjemplar() ;
+			matriz[i][1] = lista.get(i).getNumero_ejemplar() ;
+			matriz[i][2] = lista.get(i).getTitulo() ;
+			}		
+		return matriz;	
+	}
 	/**
 	 * @return the problemaSQLejemplarDAO
 	 */

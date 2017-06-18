@@ -12,6 +12,7 @@ import javax.swing.JMenuItem;
 import controlador.Controlador;
 import modelo.EjemplarDAO;
 import modelo.LibroDAO;
+import modelo.PrestamoDAO;
 import modelo.UsuarioDAO;
 import java.awt.Rectangle;
 import javax.swing.GroupLayout;
@@ -41,6 +42,7 @@ public class Vista extends JFrame {
 	private PanelAplicacion panelAplicacion;
 	private PanelGestionPrestamos panelprestados;
 	private PanelParaPrestar panelPrestar;
+	private JMenuItem mntmPrestarEjemplares;
 	
 
 
@@ -53,7 +55,7 @@ public class Vista extends JFrame {
 				try {	
 					Vista frame = new Vista();
 					frame.setVisible(true);
-					new Controlador (frame, new EjemplarDAO(), new LibroDAO(), new UsuarioDAO());
+					new Controlador (frame, new EjemplarDAO(), new LibroDAO(), new UsuarioDAO(), new PrestamoDAO());
 					
 				} 	catch (Exception e) {
 					e.printStackTrace();
@@ -123,26 +125,29 @@ public class Vista extends JFrame {
 		mnUsuarios = new JMenu("Usuarios");
 		menuBar.add(mnUsuarios);
 		
-		mntmGestionarUsuarios = new JMenuItem("Gestionar Usuarios");
+		mntmGestionarUsuarios = new JMenuItem("Gestión Usuarios");
 		mnUsuarios.add(mntmGestionarUsuarios);
 		
 		mnLibros = new JMenu("Libros");
 		menuBar.add(mnLibros);
 		
-		mntmGestionarLibros = new JMenuItem("Gestionar Libros");
+		mntmGestionarLibros = new JMenuItem("Gestión Libros");
 		mnLibros.add(mntmGestionarLibros);
 		
 		mnEjemplares = new JMenu("Ejemplares");
 		menuBar.add(mnEjemplares);
 		
-		mntmGestionarEjemplares = new JMenuItem("Gestionar Ejemplares");
+		mntmGestionarEjemplares = new JMenuItem("Gestión Ejemplares");
 		mnEjemplares.add(mntmGestionarEjemplares);
 		
 		mnPrestamos = new JMenu("Prestamos");
 		menuBar.add(mnPrestamos);
 		
-		mntmGestionarPrstamos = new JMenuItem("Gestionar Préstamos");
+		mntmGestionarPrstamos = new JMenuItem("Gestión Préstamos");
 		mnPrestamos.add(mntmGestionarPrstamos);
+		
+		mntmPrestarEjemplares = new JMenuItem("Prestar Ejemplares");
+		mnPrestamos.add(mntmPrestarEjemplares);
 		
 		
 		contentPane = new JPanel();
@@ -381,6 +386,13 @@ public class Vista extends JFrame {
 	 */
 	public PanelParaPrestar getPanelPrestar() {
 		return panelPrestar;
+	}
+
+	/**
+	 * @return the mntmPrestarEjemplares
+	 */
+	public JMenuItem getMntmPrestarEjemplares() {
+		return mntmPrestarEjemplares;
 	}
 
 		

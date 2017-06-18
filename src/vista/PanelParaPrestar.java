@@ -6,16 +6,27 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.TitledBorder;
+
+import controlador.ModeloTablaPrestarEjemplares;
+import controlador.ModeloTablaPrestarLibros;
+import controlador.ModeloTablaPrestarUsuarios;
+
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import java.awt.SystemColor;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
+@SuppressWarnings("serial")
 public class PanelParaPrestar extends JPanel {
+	
 	private JTextField textApellidosUsuarios;
 	private JTextField textNombreUsuario;
 	private JTextField TextDniUsuario;
@@ -28,6 +39,7 @@ public class PanelParaPrestar extends JPanel {
 	private JTable tableUsuarioPrestar;
 	private JTable tableLibrosPrestar;
 	private JTable tableEjemplaresPrestar;
+	 
 	private JTextField textMensaje;
 	private JButton btnPrestar;
 	private JButton btnMenu;
@@ -48,6 +60,8 @@ public class PanelParaPrestar extends JPanel {
 		panelEjemplares.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Ejemplares disponibles", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
 		textMensaje = new JTextField();
+		textMensaje.setHorizontalAlignment(SwingConstants.CENTER);
+		textMensaje.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		textMensaje.setEditable(false);
 		textMensaje.setBackground(SystemColor.window);
 		textMensaje.setColumns(10);
@@ -154,7 +168,12 @@ public class PanelParaPrestar extends JPanel {
 					.addContainerGap())
 		);
 		
-		tableEjemplaresPrestar = new JTable();
+		tableEjemplaresPrestar = new JTable(new ModeloTablaPrestarEjemplares());
+		tableEjemplaresPrestar.setAutoCreateRowSorter(true);
+		tableEjemplaresPrestar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableEjemplaresPrestar.getColumnModel().getColumn(0).setMinWidth(50);
+		tableEjemplaresPrestar.getColumnModel().getColumn(1).setMaxWidth(50);
+		//tableEjemplaresPrestar.getColumnModel().getColumn(2).setMinWidth(0);
 		scrollPane_2.setViewportView(tableEjemplaresPrestar);
 		panelEjemplares.setLayout(gl_panelEjemplares);
 		
@@ -221,7 +240,11 @@ public class PanelParaPrestar extends JPanel {
 					.addContainerGap())
 		);
 		
-		tableLibrosPrestar = new JTable();
+		tableLibrosPrestar = new JTable(new ModeloTablaPrestarLibros());
+		tableLibrosPrestar.setAutoCreateRowSorter(true);
+		tableLibrosPrestar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableLibrosPrestar.getColumnModel().getColumn(2).setMaxWidth(75);
+		tableLibrosPrestar.getColumnModel().getColumn(2).setMinWidth(0);
 		scrollPane_1.setViewportView(tableLibrosPrestar);
 		panelLibros.setLayout(gl_panelLibros);
 		
@@ -286,7 +309,10 @@ public class PanelParaPrestar extends JPanel {
 					.addContainerGap())
 		);
 		
-		tableUsuarioPrestar = new JTable();
+		tableUsuarioPrestar = new JTable(new ModeloTablaPrestarUsuarios());
+		tableUsuarioPrestar.setAutoCreateRowSorter(true);
+		tableUsuarioPrestar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		scrollPane.setViewportView(tableUsuarioPrestar);
 		panelUsers.setLayout(gl_panelUsers);
 		setLayout(groupLayout);

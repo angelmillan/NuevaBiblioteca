@@ -39,6 +39,15 @@ public class Prestamo {
 		this.prestamo = prestamo;
 		this.devolucion = devolucion;
 	}
+	
+	
+
+	public Prestamo(String isbn, String titulo, String autor) {
+		super();
+		this.isbn = isbn;
+		this.titulo = titulo;
+		this.autor = autor;
+	}
 
 	/**
 	 * @return the dni

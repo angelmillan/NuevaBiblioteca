@@ -178,6 +178,18 @@ public class UsuarioDAO implements IUsuarioDAO {
 		
 		return matriz;	
 	}
+	
+	public static Object [][] listaAMatrizPrestar (List<Usuario> lista){
+		Object [][] matriz = new Object [lista.size()][3];
+			
+			for (int i=0 ; i < lista.size() ;i++){
+			matriz[i][0] = lista.get(i).getDniUsuario() ;
+			matriz[i][1] = lista.get(i).getNombre() ;
+			matriz[i][2] = lista.get(i).getApellidos() ;
+			}
+		
+		return matriz;	
+	}
 
 	/**
 	 * @return the problemaSQLusuarioDAO

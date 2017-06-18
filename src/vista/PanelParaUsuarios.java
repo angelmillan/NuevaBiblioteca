@@ -154,7 +154,7 @@ public class PanelParaUsuarios extends JPanel {
 		
 		textMensaje = new JTextField();
 		textMensaje.setForeground(Color.RED);
-		textMensaje.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		textMensaje.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		textMensaje.setEditable(false);
 		textMensaje.setColumns(10);
 		textMensaje.setBounds(new Rectangle(25, 25, 0, 0));

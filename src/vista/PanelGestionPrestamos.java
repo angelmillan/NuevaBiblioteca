@@ -19,13 +19,18 @@ import javax.swing.ListSelectionModel;
 
 import java.awt.SystemColor;
 import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class PanelGestionPrestamos extends JPanel {
 	private JTable tablePrestados;
 	private JTable tableDevueltos;
 	private JTextField textFieldMensaje;
 	private JButton btnMenu;
 	private JButton btnDevolverEjemplar;
+	private JButton btnConfirmar;
+	private JButton btnCancelar;
 
 	/**
 	 * Create the panel.
@@ -40,28 +45,39 @@ public class PanelGestionPrestamos extends JPanel {
 		panel_1.setBorder(new TitledBorder(null, "Ejemplares devueltos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		textFieldMensaje = new JTextField();
+		textFieldMensaje.setForeground(new Color(0, 0, 0));
+		textFieldMensaje.setEditable(false);
+		textFieldMensaje.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		textFieldMensaje.setBackground(SystemColor.window);
-		textFieldMensaje.setEnabled(false);
 		textFieldMensaje.setColumns(10);
 		
-		btnDevolverEjemplar = new JButton("Devolver Ejemplar");
+		btnDevolverEjemplar = new JButton("Devolver Préstamo");
+		btnDevolverEjemplar.setEnabled(false);
 		
 		btnMenu = new JButton("Menú");
+		
+		btnConfirmar = new JButton("Confirmar Devolución");
+		btnConfirmar.setVisible(false);
+		
+		btnCancelar = new JButton("Cancelar Devolución");
+		btnCancelar.setVisible(false);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(textFieldMensaje, GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 888, Short.MAX_VALUE)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(6)
-								.addComponent(btnDevolverEjemplar)
-								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnMenu))
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 886, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(textFieldMensaje, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 888, Short.MAX_VALUE)
+						.addComponent(panel_1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 886, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnDevolverEjemplar)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnConfirmar)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnCancelar)
+							.addPreferredGap(ComponentPlacement.RELATED, 338, Short.MAX_VALUE)
+							.addComponent(btnMenu)))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -71,11 +87,13 @@ public class PanelGestionPrestamos extends JPanel {
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(28)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnDevolverEjemplar)
-						.addComponent(btnMenu))
-					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+						.addComponent(btnMenu)
+						.addComponent(btnConfirmar)
+						.addComponent(btnCancelar))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(textFieldMensaje, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
@@ -97,9 +115,9 @@ public class PanelGestionPrestamos extends JPanel {
 		
 		tableDevueltos = new JTable(new ModeloTableDevueltos());
 		tableDevueltos.setAutoCreateRowSorter(true);
-		tableDevueltos.setRowSelectionAllowed(false);
-		tableDevueltos.setCellSelectionEnabled(false);
-		//tableDevueltos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		//tableDevueltos.setRowSelectionAllowed(false);
+		//tableDevueltos.setCellSelectionEnabled(false);
+		tableDevueltos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane_1.setViewportView(tableDevueltos);
 		panel_1.setLayout(gl_panel_1);
 		
@@ -162,5 +180,21 @@ public class PanelGestionPrestamos extends JPanel {
 	public JButton getBtnDevolverEjemplar() {
 		return btnDevolverEjemplar;
 	}
+
+	/**
+	 * @return the btnConfirmar
+	 */
+	public JButton getBtnConfirmar() {
+		return btnConfirmar;
+	}
+
+	/**
+	 * @return the btnCancelar
+	 */
+	public JButton getBtnCancelar() {
+		return btnCancelar;
+	}
+
+
 	
 }
