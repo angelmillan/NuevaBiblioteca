@@ -49,20 +49,7 @@ public class Vista extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {	
-					Vista frame = new Vista();
-					frame.setVisible(true);
-					new Controlador (frame, new EjemplarDAO(), new LibroDAO(), new UsuarioDAO(), new PrestamoDAO());
-					
-				} 	catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
@@ -104,6 +91,7 @@ public class Vista extends JFrame {
 	}
 	
 	public Vista() {
+		setVisible(true);
 		setBounds(new Rectangle(0, 0, 900, 500));
 		setResizable(false);
 		setMaximumSize(new Dimension(0, 0));

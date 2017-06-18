@@ -43,6 +43,8 @@ public class PanelParaPrestar extends JPanel {
 	private JTextField textMensaje;
 	private JButton btnPrestar;
 	private JButton btnMenu;
+	private JButton btnConfirmarPrestamo;
+	private JButton btnCancelarPrestamo;
 
 	/**
 	 * Create the panel.
@@ -67,8 +69,15 @@ public class PanelParaPrestar extends JPanel {
 		textMensaje.setColumns(10);
 		
 		btnPrestar = new JButton("Prestar");
+		btnPrestar.setEnabled(false);
 		
 		btnMenu = new JButton("Menú");
+		
+		btnConfirmarPrestamo = new JButton("Confirmar Préstamo");
+		btnConfirmarPrestamo.setVisible(false);
+		
+		btnCancelarPrestamo = new JButton("Cancelar Préstamo");
+		btnCancelarPrestamo.setVisible(false);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -84,7 +93,11 @@ public class PanelParaPrestar extends JPanel {
 							.addComponent(panelEjemplares, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnPrestar)
-							.addPreferredGap(ComponentPlacement.RELATED, 684, Short.MAX_VALUE)
+							.addGap(18)
+							.addComponent(btnConfirmarPrestamo)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnCancelarPrestamo)
+							.addPreferredGap(ComponentPlacement.RELATED, 413, Short.MAX_VALUE)
 							.addComponent(btnMenu)))
 					.addContainerGap())
 		);
@@ -99,8 +112,10 @@ public class PanelParaPrestar extends JPanel {
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnPrestar)
-						.addComponent(btnMenu))
-					.addPreferredGap(ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+						.addComponent(btnMenu)
+						.addComponent(btnConfirmarPrestamo)
+						.addComponent(btnCancelarPrestamo))
+					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
 					.addComponent(textMensaje, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
@@ -422,6 +437,20 @@ public class PanelParaPrestar extends JPanel {
 	 */
 	public JButton getBtnMenu() {
 		return btnMenu;
+	}
+
+	/**
+	 * @return the btnConfirmarPrestamo
+	 */
+	public JButton getBtnConfirmarPrestamo() {
+		return btnConfirmarPrestamo;
+	}
+
+	/**
+	 * @return the btnCancelarPrestamo
+	 */
+	public JButton getBtnCancelarPrestamo() {
+		return btnCancelarPrestamo;
 	}
 		
 }

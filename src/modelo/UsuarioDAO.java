@@ -144,25 +144,25 @@ public class UsuarioDAO implements IUsuarioDAO {
 
 	@Override
 	public boolean borrarUsuario(Usuario usuario) {
+		
+		
 		problemaSQLusuarioDAO = false;
+		System.out.println(usuario);
+		System.out.println(usuario.getDniUsuario());
 		sql = "DELETE FROM usuarios WHERE dni=?;";
 		Connection conexion = Conexion.getInstance();
 		filas = 0;
 		try {
-			PreparedStatement preparedStatement = conexion.prepareStatement(sql);
+			preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, usuario.getDniUsuario());
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()){
-				filas++;
-			}
-
+			filas = preparedStatement.executeUpdate();
+			if (filas != 0)
+				return true;
 		} catch (SQLException e) {
 			problemaSQLusuarioDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema borrar el Usuario", "Problema SQLite", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		if(filas!=0)
-			return true;
+
 		return false;
 	}
 	

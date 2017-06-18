@@ -162,10 +162,7 @@ public class LibroDAO implements ILibroDAO {
 		try {
 			PreparedStatement preparedStatement = conexion.prepareStatement(sql);
 			preparedStatement.setString(1, libro.getIsbnLibro());
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()){
-				filas++;
-			}
+			filas = preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			problemaSQLLibroDAO = true;
 			JOptionPane.showMessageDialog(null, "Problema borrar el libro", "Problema SQLite", JOptionPane.ERROR_MESSAGE);

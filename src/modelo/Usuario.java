@@ -14,6 +14,15 @@ public class Usuario {
 		this.apellidos = apellidos;
 		this.direccion = direccion;
 	}
+	
+	
+
+	public Usuario(String dniUsuario) {
+		super();
+		this.dniUsuario = dniUsuario;
+	}
+
+
 
 	/**
 	 * @return the dniUsuario

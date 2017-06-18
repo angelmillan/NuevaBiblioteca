@@ -29,6 +29,9 @@ import vista.Vista;
 public class Controlador implements ActionListener {
 	private boolean nuevolibro = false;
 	private boolean nuevousuario = false;
+	private boolean PrestarUsaurioSeleccionado = false;
+	private boolean PrestarLibroSeleccionado = false;
+	private boolean PrestarEjemplarSeleccionado = false;
 	Matcher mat = null;
 	private Vista vista;
 	private EjemplarDAO ejemplarDAO;
@@ -64,77 +67,41 @@ public class Controlador implements ActionListener {
 
 		// boton de vuelta al menu principal de la aplicacion
 		case ("Menú"):
-			vista.getPanelAplicacion().setVisible(true);
-			vista.getPanelUsuarios().setVisible(false);
-			vista.getPanelEjemplares().setVisible(false);
-			vista.getPanelLibros().setVisible(false);
-			vista.getPanelprestados().setVisible(false);
-			vista.getPanelPrestar().setVisible(false);
-		break;
+			accionBotonMenu();
+			break;
 
 		// botones del menu principal de la aplicacion
 		case ("Acerca de Biblioteca"):
-			vista.getPanelAplicacion().setVisible(true);
-			vista.getPanelUsuarios().setVisible(false);
-			vista.getPanelEjemplares().setVisible(false);	    		
-			vista.getPanelLibros().setVisible(false);
-			vista.getPanelprestados().setVisible(false);
-			vista.getPanelPrestar().setVisible(false);
-		break;
+			accionBotonAcercaBiblioteca();
+			break;
 
 		case ("Salir"):
 			System.exit(0);
-		break;
+			break;
 
 		// Botones Panel Aplicación y menus desplegables del frame
 		case ("Gestión Usuarios"):
-			vista.getPanelAplicacion().setVisible(false);
-			vista.getPanelUsuarios().setVisible(true);
-			vista.getPanelEjemplares().setVisible(false);
-			vista.getPanelLibros().setVisible(false);
-			vista.getPanelprestados().setVisible(false);
-			vista.getPanelPrestar().setVisible(false);
-		break;
+			accionBotonGestionUsuarios();
+			break;
 
 		case ("Gestión Libros"):
-			vista.getPanelAplicacion().setVisible(false);
-			vista.getPanelUsuarios().setVisible(false);
-			vista.getPanelEjemplares().setVisible(false);
-			vista.getPanelLibros().setVisible(true);
-			vista.getPanelprestados().setVisible(false);
-			vista.getPanelPrestar().setVisible(false);
-		break;
+			accionBotonGestionLibros();
+			break;
 
 		case ("Gestión Ejemplares"):
-			vista.getPanelAplicacion().setVisible(false);
-			vista.getPanelUsuarios().setVisible(false);
-			vista.getPanelEjemplares().setVisible(true);	    		
-			vista.getPanelLibros().setVisible(false);
-			vista.getPanelprestados().setVisible(false);
-			vista.getPanelPrestar().setVisible(false);
-		break;	
+			accionBotonGestionEjemplares();
+			break;	
 
 		case ("Gestión Préstamos"):
-			vista.getPanelAplicacion().setVisible(false);
-			vista.getPanelUsuarios().setVisible(false);
-			vista.getPanelEjemplares().setVisible(false);	    		
-			vista.getPanelLibros().setVisible(false);
-			vista.getPanelprestados().setVisible(true);
-			vista.getPanelPrestar().setVisible(false);
-		break;
+			accionBotonGestionPrestamos();
+			break;
 
 		case ("Prestar Ejemplares"):
-			vista.getPanelAplicacion().setVisible(false);
-			vista.getPanelUsuarios().setVisible(false);
-			vista.getPanelEjemplares().setVisible(false);	    		
-			vista.getPanelLibros().setVisible(false);
-			vista.getPanelprestados().setVisible(false);
-			vista.getPanelPrestar().setVisible(true);
-		break;	
+			accionBotonPrestarEjemplares();
+			break;	
 
 		// Botones del Panel Ejemplares
 		case ("Añadir nuevo ejemplar"):
-
 			if (vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow() >= 0) {
 				int fila = vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow();
 				Object isbn = vista.getPanelEjemplares().getTabla_Ejemplares().getValueAt(fila, 0);
@@ -147,9 +114,7 @@ public class Controlador implements ActionListener {
 				vista.getPanelEjemplares().getTextField_Mensajes().setForeground(Color.RED.brighter());
 				vista.getPanelEjemplares().getTextField_Mensajes().setText("No hay ejemplar seleccionado para añadir");
 			}
-
-		break;
-
+			break;
 		case ("Borrar Ejemplar"):
 
 			if (vista.getPanelEjemplares().getTabla_Ejemplares().getSelectedRow() >= 0) {
@@ -168,20 +133,18 @@ public class Controlador implements ActionListener {
 					vista.getPanelEjemplares().getTextField_Mensajes().setText("El ejemplar está prestado y no puede eliminarse");
 					break;
 				}
-
 			} else {
 				vista.getPanelEjemplares().getTextField_Mensajes().setForeground(Color.RED.brighter());
 				vista.getPanelEjemplares().getTextField_Mensajes().setText("No hay ejemplar seleccionado para eliminar");
 			}
-		break;
-
+			break;
 		// Botones del Panel Libros
 		case ("Añadir nuevo Libro"):
 			nuevolibro = true;
 			limpiaCamposLibros();
 			hacerEditablesTextFieldsPaneldeLibros();
 			refrescarTablaLibros();
-		break;
+			break;
 
 		case ("Borrar Libro"):
 			if (vista.getPanelLibros().getTablaLibros().getSelectedRow() >= 0) {
@@ -195,7 +158,6 @@ public class Controlador implements ActionListener {
 						vista.getPanelLibros().getTextMensajes().setText("El Libro tiene ejemplares activos no puede eliminarse");
 						break;	
 					}
-
 					libroDAO.borrarLibro(aBorrar);
 					vista.getPanelLibros().getTextMensajes().setForeground(Color.GREEN.darker());
 					vista.getPanelLibros().getTextMensajes().setText("Libro borrado correctamente");
@@ -207,18 +169,16 @@ public class Controlador implements ActionListener {
 					vista.getPanelLibros().getTextMensajes().setText("El Libro está prestado y no puede eliminarse");
 					break;
 				}
-
 			} else {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("No hay libro seleccionado para eliminar");
 			}
-		System.out.println("boton Borrar Libro");
-		break;
+			break;
 
 		case ("Modificar Libro"):
 			hacerEditablesTextFieldsPaneldeLibros();
 			vista.getPanelLibros().getTextISBN().setEditable(false);
-		break;
+			break;
 
 		case ("Añadir nuevo ejemplar de libro"):
 			if (vista.getPanelLibros().getTablaLibros().getSelectedRow() >= 0) {
@@ -239,18 +199,18 @@ public class Controlador implements ActionListener {
 				vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 				vista.getPanelLibros().getTextMensajes().setText("No hay ejemplar seleccionado para añadir");
 			}
-		break;
+			break;
 
 		case("Guardar Libro"):			
 			guardarLibro();
 			volverOcultosTextFieldsPaneldeLibros();
 			refrescarTablaLibros();
-		break;
+			break;
 
 		case("Cancelar libro"):
 			volverOcultosTextFieldsPaneldeLibros();
 			refrescarTablaLibros();
-		break;
+			break;
 
 		// Botones del Panel Usuarios
 
@@ -260,31 +220,50 @@ public class Controlador implements ActionListener {
 			limpiaCamposUsuarios();
 			hacerEditablesTextFieldsPaneldeUsuarios();
 			refrescarTablaUsuarios();
-		break;
+			break;
 
 		case("Borrar Usuario"):
-			System.out.println("boton Borrar Usuario");
-		break;
+			if (vista.getPanelUsuarios().getTableUsuarios().getSelectedRow() < 0) {
+				vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.brighter());
+				vista.getPanelUsuarios().getTextMensaje().setText("No ha seleccionado Usuario");
+			break;
+			}
+			
+			String dniaborrar = vista.getPanelUsuarios().getTextDNI().getText().trim();
+			System.out.println(dniaborrar);
+			if(usuarioDAO.borrarUsuario(new Usuario(dniaborrar))){
+				vista.getPanelUsuarios().getTextMensaje().setForeground(Color.GREEN.darker());
+				vista.getPanelUsuarios().getTextMensaje().setText("Eliminado correctamente");	
+			} else {
+				vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.brighter());
+				vista.getPanelUsuarios().getTextMensaje().setText("No se ha eliminado, tiene ejemplares prestados");
+			}
+			break;
 
 		case("Modificar Usuario"):
-			System.out.println("boton Modificar Usuario");
+			if(vista.getPanelUsuarios().getTableUsuarios().getSelectedRow()<0){
+				vista.getPanelUsuarios().getTextMensaje().setForeground(Color.RED.brighter());
+				vista.getPanelUsuarios().getTextMensaje().setText("No ha seleccionado ningun Usuario");
+				break;
+			}
+			vista.getPanelUsuarios().getTextMensaje().setText("Introduzca nuevo datos. DNI no modificable");
 			hacerEditablesTextFieldsPaneldeUsuarios();
 			vista.getPanelUsuarios().getTextDNI().setEditable(false);
-		break;
+			break;
 
 		case("Guardar Usuario"):
 			guardarUsuario()	;
 			volverOcultosTextFieldsPaneldeUsuarios();
 			refrescarTablaUsuarios();
-		break;
+			break;
 
 		case("Cancelar Usuario"):
+			vista.getPanelUsuarios().getTextMensaje().setText("Cancelado");
 			volverOcultosTextFieldsPaneldeUsuarios();
 			refrescarTablaUsuarios();
-		break;
+			break;
 
-		case("Devolver Préstamo"):
-			
+		case("Devolver Préstamo"):			
 			vista.getPanelprestados().getBtnDevolverEjemplar().setEnabled(false);
 			if (vista.getPanelprestados().getTablePrestados().getSelectedRow() >= 0) {
 				vista.getPanelprestados().getBtnDevolverEjemplar().setEnabled(true);
@@ -307,22 +286,53 @@ public class Controlador implements ActionListener {
 				vista.getPanelprestados().getTextFieldMensaje().setForeground(Color.RED.brighter());
 				vista.getPanelprestados().getTextFieldMensaje().setText("No hay prestamo seleccionado");
 			}
-
-		break;
+			break;
 		
 		case("Confirmar Devolución"):
 			devolverPrestamo(prestamo);
 			vista.getPanelprestados().getBtnConfirmar().setVisible(false);
 			vista.getPanelprestados().getBtnCancelar().setVisible(false);
 			vista.getPanelprestados().getTextFieldMensaje().setText("Devolución completada correctamente");
-
-		break;
+			break;
 
 		case ("Cancelar Devolución"):
 			vista.getPanelprestados().getBtnConfirmar().setVisible(false);
 			vista.getPanelprestados().getBtnCancelar().setVisible(false);
 			vista.getPanelprestados().getTextFieldMensaje().setText("Devolución Cancelada");
-		break;
+			break;
+		
+		case ("Prestar"):
+			vista.getPanelPrestar().getBtnConfirmarPrestamo().setVisible(true);
+			vista.getPanelPrestar().getBtnCancelarPrestamo().setVisible(true);
+			vista.getPanelPrestar().getBtnPrestar().setEnabled(false);
+			String titulo = vista.getPanelPrestar().getTextTituloLibro().getText();
+			String autor = vista.getPanelPrestar().getTextAutorLibro().getText();
+			String nombre = vista.getPanelPrestar().getTextNombreUsuario().getText();
+			String apellidos = vista.getPanelPrestar().getTextApellidosUsuarios().getText();
+			String ejemplar = vista.getPanelPrestar().getTextNumeroEjemplar().getText();
+			vista.getPanelPrestar().getTextMensaje().setText("¿ Prestar " + titulo + " de " + autor + 
+					" copia " + ejemplar + " a " + nombre + " " + apellidos + " ?");
+			break;
+		
+		case ("Confirmar Préstamo"):
+			String dni = vista.getPanelPrestar().getTextDniUsuario().getText();
+			String isbn = vista.getPanelPrestar().getTextIsbnEjemplar().getText();
+			String numero_ejemplar = vista.getPanelPrestar().getTextNumeroEjemplar().getText();
+			prestamo = new Prestamo(dni,isbn,Integer.parseInt(numero_ejemplar));
+			System.out.println(prestamo);
+			if (prestamoDAO.prestarEjemplarAUsuario(prestamo)){
+				vista.getPanelPrestar().getTextMensaje().setText("Ejemplar prestado con éxito");
+			} else {
+				vista.getPanelPrestar().getTextMensaje().setText("no se ha podoco prestar");
+			}
+			break;
+		
+		case ("Cancelar Préstamo"):
+			vista.getPanelPrestar().getBtnConfirmarPrestamo().setVisible(false);
+			vista.getPanelPrestar().getBtnCancelarPrestamo().setVisible(false);
+			vista.getPanelPrestar().getBtnPrestar().setEnabled(true);
+			vista.getPanelPrestar().getTextMensaje().setText("Prestamo cancelado");
+			break;
 		
 		default:
 
@@ -381,6 +391,8 @@ public class Controlador implements ActionListener {
 		vista.getPanelprestados().getBtnMenu().addActionListener(escuchador);
 		//Listener de botones de panel prestar ejemplares
 		vista.getPanelPrestar().getBtnPrestar().addActionListener(escuchador);
+		vista.getPanelPrestar().getBtnConfirmarPrestamo().addActionListener(escuchador);
+		vista.getPanelPrestar().getBtnCancelarPrestamo().addActionListener(escuchador);
 		vista.getPanelPrestar().getBtnMenu().addActionListener(escuchador);
 
 		// Listener ListSelectionEvent para JTable del Panel Ejemplares Obtiene datos de la fila del JTable seleccionado 
@@ -411,13 +423,33 @@ public class Controlador implements ActionListener {
 			vista.getPanelprestados().getTextFieldMensaje().setText("");
 		});
 		vista.getPanelPrestar().getTableUsuarioPrestar().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-			accionEventoTableUsuarioPrestar();	
+			accionEventoTableUsuarioPrestar();
+			if (PrestarUsaurioSeleccionado) 
+				if (PrestarLibroSeleccionado)
+					if (PrestarEjemplarSeleccionado)
+						vista.getPanelPrestar().getBtnPrestar().setEnabled(true);
 		});
 		vista.getPanelPrestar().getTableLibrosPrestar().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+			vista.getPanelPrestar().getTextMensaje().setText("");
 			accionEventoTableLibroPrestar();	
+			if (PrestarUsaurioSeleccionado) 
+				if (PrestarLibroSeleccionado) {
+					if (PrestarEjemplarSeleccionado){
+						vista.getPanelPrestar().getBtnPrestar().setEnabled(true);
+					} else {
+						vista.getPanelPrestar().getBtnPrestar().setEnabled(false);
+					}
+				}
 		});
 		vista.getPanelPrestar().getTableEjemplaresPrestar().getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-			accionEventoTableEjemplarPrestar();	
+			accionEventoTableEjemplarPrestar();
+			if (PrestarUsaurioSeleccionado) 
+				if (PrestarLibroSeleccionado)
+					if (PrestarEjemplarSeleccionado){
+						vista.getPanelPrestar().getBtnPrestar().setEnabled(true);
+					} else {
+						vista.getPanelPrestar().getBtnPrestar().setEnabled(false);
+					}
 		});
 
 	}
@@ -826,7 +858,9 @@ public class Controlador implements ActionListener {
 				vista.getPanelPrestar().getTextDniUsuario().setText(dni.toString());
 				vista.getPanelPrestar().getTextNombreUsuario().setText(nombre.toString());
 				vista.getPanelPrestar().getTextApellidosUsuarios().setText(apellidos.toString());
-
+				PrestarUsaurioSeleccionado = true;
+			} else {
+				PrestarUsaurioSeleccionado = false;
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -850,6 +884,10 @@ public class Controlador implements ActionListener {
 				vista.getPanelPrestar().getTextIsbnEjemplar().setText("");
 				vista.getPanelPrestar().getTextNumeroEjemplar().setText("");
 				vista.getPanelPrestar().getTextTituloEjemplar().setText("");
+				PrestarEjemplarSeleccionado = false;
+				PrestarLibroSeleccionado = true;
+			} else {
+				PrestarLibroSeleccionado = false;
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -872,19 +910,77 @@ public class Controlador implements ActionListener {
 				if (!ejemplarDAO.ejemplarprestado(eje)) {
 					vista.getPanelPrestar().getTextMensaje().setForeground(Color.RED.brighter());
 					vista.getPanelPrestar().getTextMensaje().setText("El ejemplar " + ejemplar.toString() + " del libro " + titulo.toString() +" está prestado.");	
+					PrestarEjemplarSeleccionado = false;
 				} else {
 					vista.getPanelPrestar().getTextMensaje().setForeground(Color.GREEN.darker());
 					vista.getPanelPrestar().getTextMensaje().setText("El ejemplar " + ejemplar.toString() + " del libro " + titulo.toString() +" está libre, puede prestarlo ");	
+					PrestarEjemplarSeleccionado = true;
 				}
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		/*
-		 * Fin acciones de eventos en jTable 
-		 */
-		
-		
+	}
+	/*
+	 * Fin acciones de eventos en jTable 
+	 */	
+	
+	// acciones de los botones de los paneles y menu principal
+	public void accionBotonMenu() {
+		vista.getPanelAplicacion().setVisible(true);
+		vista.getPanelUsuarios().setVisible(false);
+		vista.getPanelEjemplares().setVisible(false);
+		vista.getPanelLibros().setVisible(false);
+		vista.getPanelprestados().setVisible(false);
+		vista.getPanelPrestar().setVisible(false);	
+	}
+	public void accionBotonAcercaBiblioteca() {
+		vista.getPanelAplicacion().setVisible(true);
+		vista.getPanelUsuarios().setVisible(false);
+		vista.getPanelEjemplares().setVisible(false);	    		
+		vista.getPanelLibros().setVisible(false);
+		vista.getPanelprestados().setVisible(false);
+		vista.getPanelPrestar().setVisible(false);
+	}
+	public void accionBotonGestionUsuarios() {
+		vista.getPanelAplicacion().setVisible(false);
+		vista.getPanelUsuarios().setVisible(true);
+		vista.getPanelEjemplares().setVisible(false);
+		vista.getPanelLibros().setVisible(false);
+		vista.getPanelprestados().setVisible(false);
+		vista.getPanelPrestar().setVisible(false);
+	}
+	public void accionBotonGestionLibros() {
+		vista.getPanelAplicacion().setVisible(false);
+		vista.getPanelUsuarios().setVisible(false);
+		vista.getPanelEjemplares().setVisible(false);
+		vista.getPanelLibros().setVisible(true);
+		vista.getPanelprestados().setVisible(false);
+		vista.getPanelPrestar().setVisible(false);
+	}
+	public void accionBotonGestionEjemplares() {
+		vista.getPanelAplicacion().setVisible(false);
+		vista.getPanelUsuarios().setVisible(false);
+		vista.getPanelEjemplares().setVisible(true);	    		
+		vista.getPanelLibros().setVisible(false);
+		vista.getPanelprestados().setVisible(false);
+		vista.getPanelPrestar().setVisible(false);
+	}
+	public void accionBotonGestionPrestamos() {
+		vista.getPanelAplicacion().setVisible(false);
+		vista.getPanelUsuarios().setVisible(false);
+		vista.getPanelEjemplares().setVisible(false);	    		
+		vista.getPanelLibros().setVisible(false);
+		vista.getPanelprestados().setVisible(true);
+		vista.getPanelPrestar().setVisible(false);
+	}
+	public void accionBotonPrestarEjemplares() {
+		vista.getPanelAplicacion().setVisible(false);
+		vista.getPanelUsuarios().setVisible(false);
+		vista.getPanelEjemplares().setVisible(false);	    		
+		vista.getPanelLibros().setVisible(false);
+		vista.getPanelprestados().setVisible(false);
+		vista.getPanelPrestar().setVisible(true);
 	}
 	
 }
