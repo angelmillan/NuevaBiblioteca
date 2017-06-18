@@ -592,7 +592,7 @@ public class Controlador implements ActionListener {
 		}
 
 		if (!comprobarEdicion(edicion.toString())){	
-			Integer yyyy = new Integer("0000");
+			
 			vista.getPanelLibros().getTextMensajes().setForeground(Color.RED.brighter());
 			vista.getPanelLibros().getTextMensajes().setText("La Edición tiene que ser (yyyy) de año válido entre el año que se invetó la imprenta y el actual");
 			vista.getPanelLibros().getTextEdicion().setText("");

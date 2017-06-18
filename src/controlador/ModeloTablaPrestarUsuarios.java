@@ -2,7 +2,6 @@ package controlador;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import modelo.PrestamoDAO;
 import modelo.UsuarioDAO;
 
 

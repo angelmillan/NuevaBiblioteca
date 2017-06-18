@@ -16,9 +16,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 

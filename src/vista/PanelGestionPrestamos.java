@@ -7,20 +7,17 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
-
 import controlador.ModeloTablaPrestados;
 import controlador.ModeloTableDevueltos;
-
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-
 import java.awt.SystemColor;
 import javax.swing.JButton;
 import java.awt.Font;
-import javax.swing.JLabel;
+
 
 @SuppressWarnings("serial")
 public class PanelGestionPrestamos extends JPanel {

@@ -1,7 +1,5 @@
 package vista;
 
-
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -9,11 +7,6 @@ import java.awt.Dimension;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import controlador.Controlador;
-import modelo.EjemplarDAO;
-import modelo.LibroDAO;
-import modelo.PrestamoDAO;
-import modelo.UsuarioDAO;
 import java.awt.Rectangle;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
